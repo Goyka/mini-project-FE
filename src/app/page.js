@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Kanban } from "@/components/Kanban";
+
 import * as St from "./styles";
 import Image from "next/image";
 import kanbanLogo from "/public/kanbanLogo.png";

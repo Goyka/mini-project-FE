@@ -2,8 +2,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Kanban } from "@/components/Kanban";
+import Create from "@/components/Create";
 
 import * as St from "./styles";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import kanbanLogo from "/public/kanbanLogo.png";
 
@@ -11,6 +13,17 @@ export default function Home() {
   const [posts, setPosts] = useState([]);
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [mainPageKey, setMainPageKey] = useState(0);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    getBodyContent();
+  };
 
   useEffect(() => {
     getBodyContent();
@@ -45,9 +58,7 @@ export default function Home() {
         <St.Nav>
           <Image src={kanbanLogo} alt="Title Logo" width={160} height={40} />
           <St.BtnWrap>
-            <St.Button>
-              <St.StyledLink href="/create">글쓰기</St.StyledLink>
-            </St.Button>
+            <St.Button onClick={openModal}>글쓰기</St.Button>
             <St.Button>
               <St.StyledLink href="/login">로그인</St.StyledLink>
             </St.Button>
@@ -75,8 +86,16 @@ export default function Home() {
             )}
           </St.RecentPost>
         </St.RePostWrap>
+
         <St.Footer>© Copyright Team 6. All rights reserved</St.Footer>
       </St.BodyWrap>
+      {isModalOpen && (
+        <St.ModalWrap onClick={isModalOpen ? closeModal : undefined}>
+          <St.Modal>
+            <Create closeModal={closeModal} setMainPageKey={setMainPageKey} />
+          </St.Modal>
+        </St.ModalWrap>
+      )}
     </St.Container>
   );
 }

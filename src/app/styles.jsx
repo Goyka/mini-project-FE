@@ -8,7 +8,7 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  max-width: 1150px;
+  max-width: 1450px;
 `;
 export const Header = styled.header`
   background-color: white;
@@ -16,6 +16,7 @@ export const Header = styled.header`
   flex-direction: column;
   padding: 7px;
   width: 100%;
+  max-width: 1150px;
   position: fixed;
   top: 0;
 `;
@@ -37,12 +38,13 @@ export const Button = styled.button`
   height: 35px;
   border-radius: 9px;
   border: none;
+  color: white;
+  font-weight: 600;
   cursor: pointer;
 `;
 export const StyledLink = styled(Link)`
   color: white;
   font-weight: 600;
-  text-align: center;
   text-decoration: none;
 `;
 export const BannerWrap = styled.div`
@@ -54,11 +56,10 @@ export const BannerWrap = styled.div`
 `;
 export const BodyWrap = styled.div`
   margin: 130px auto;
-  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  max-width: 1150px;
+  gap: 12px;
 `;
 export const RePostWrap = styled.div`
   display: flex;
@@ -70,7 +71,7 @@ export const RePostWrap = styled.div`
 `;
 export const RecentPost = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   padding: 10px;
 `;
 export const TrPostWrap = styled.div`
@@ -87,16 +88,43 @@ export const Footer = styled.footer`
 
 export const Box = styled.div`
   background-color: #ffffff;
-  width: 230px;
+  flex: 1;
+  min-width: calc(25% - 12px);
+  max-width: calc(30% - 12px);
   height: 100px;
   padding: 20px;
   border: 1.5px solid lightgray;
   border-radius: 17px;
-  margin: 0 6px 6px 6px;
+  margin: 0 6px 12px 6px;
   transition: transform 0.4s;
   cursor: pointer;
 
   &:hover {
     transform: scale(1.04);
   }
+`;
+
+export const ModalWrap = styled.div`
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.15);
+  justify-content: center;
+  align-items: center;
+`;
+export const Modal = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  width: 400px;
+  height: 400px;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 `;

@@ -56,6 +56,7 @@ export const BannerWrap = styled.div`
 `;
 export const BodyWrap = styled.div`
   margin: 130px auto;
+
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -67,12 +68,16 @@ export const RePostWrap = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
+
   margin-top: 50px;
 `;
 export const RecentPost = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
   padding: 10px;
+  width: 1000px;
 `;
 export const TrPostWrap = styled.div`
   display: flex;
@@ -89,8 +94,8 @@ export const Footer = styled.footer`
 export const Box = styled.div`
   background-color: #ffffff;
   flex: 1;
-  min-width: calc(25% - 12px);
-  max-width: calc(30% - 12px);
+  min-width: calc(20% - 12px);
+  max-width: calc(25% - 12px);
   height: 100px;
   padding: 20px;
   border: 1.5px solid lightgray;

@@ -7,13 +7,14 @@ export default function Create({ closeModal, setMainPageKey }) {
   const [createTitle, setCreateTitle] = useState("");
   const [createBody, setCreateBody] = useState("");
 
-  //   useEffect(() => {
-  // 토큰이 없을 시, 접근 인가를 거절
-  //     const token = sessionStorage.getItem("token");
-  //     if (!token) {
-  //       closeModal();
-  //     }
-  //   }, []);
+  //     useEffect(() => {
+  //   // 토큰이 없을 시, 접근 인가를 거절
+  //         const token = sessionStorage.getItem("token");
+
+  //       if (!token) {
+  //         closeModal();
+  //       }
+  //     }, []);
 
   const onSaveHandler = async (e) => {
     try {

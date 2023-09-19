@@ -79,14 +79,7 @@ export const RecentPost = styled.div`
   padding: 10px;
   width: 1000px;
 `;
-export const TrPostWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  margin-top: 50px;
-`;
+
 export const Footer = styled.footer`
   margin-top: 200px;
 `;

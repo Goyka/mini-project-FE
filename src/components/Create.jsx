@@ -1,7 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
-import * as St from "../app/styles";
+import * as St from "../styles/styles";
+
+/**
+ * @author : Goya Gim
+ * @includes : Create Kanban contents and post to the server.
+ */
 
 export default function Create({ closeModal, setMainPageKey }) {
   const [createTitle, setCreateTitle] = useState("");
@@ -18,7 +23,7 @@ export default function Create({ closeModal, setMainPageKey }) {
 
   const onSaveHandler = async (e) => {
     try {
-      const response = await axios.post("http://localhost:4000/test", {
+      const response = await axios.post("http://54.180.123.127:8080/api/post", {
         title: createTitle,
         contents: createBody,
       });

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import * as St from "../app/styles";
+import * as St from "../styles/styles";
 import { useRouter } from "next/navigation";
 
 export function Kanban({ id, title }) {

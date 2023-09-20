@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../api/instance";
 import * as St from "../styles/styles";
 
 /**
@@ -11,25 +11,28 @@ import * as St from "../styles/styles";
 export default function Create({ closeModal, setMainPageKey }) {
   const [createTitle, setCreateTitle] = useState("");
   const [createBody, setCreateBody] = useState("");
+  const token = sessionStorage.getItem("token");
 
-  //     useEffect(() => {
+  // useEffect(() => {
   //   // 토큰이 없을 시, 접근 인가를 거절
-  //         const token = sessionStorage.getItem("token");
-
-  //       if (!token) {
-  //         closeModal();
-  //       }
-  //     }, []);
+  //   if (!token) {
+  //     closeModal();
+  //   }
+  // }, []);
 
   const onSaveHandler = async (e) => {
     try {
-      const response = await axios.post("http://localhost:4000/test", {
-        title: createTitle,
-        contents: createBody,
-      });
+      const response = await axios.post(
+        "/api/post",
+        {
+          title: createTitle,
+          content: createBody,
+        },
+        config
+      );
       e.stopPropagation();
       setCreateTitle(response.data.title);
-      setCreateBody(response.data.contents);
+      setCreateBody(response.data.content);
       closeModal();
       setMainPageKey((prevKey) => prevKey + 1);
     } catch (error) {

@@ -1,7 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
-import * as St from "../app/styles";
+import * as St from "../styles/styles";
+
+/**
+ * @author : Goya Gim
+ * @includes : Create Kanban contents and post to the server.
+ */
 
 export default function Create({ closeModal, setMainPageKey }) {
   const [createTitle, setCreateTitle] = useState("");

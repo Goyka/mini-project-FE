@@ -11,6 +11,7 @@ import Loading from "@/components/Loading";
 import * as St from "../styles/styles";
 import Image from "next/image";
 import kanbanLogo from "/public/kanbanLogo.png";
+import { DndContainer } from "@/components/DndContainer";
 
 /**
  * @author : Goya Gim
@@ -25,11 +26,17 @@ export default function Home() {
   const dispatch = useDispatch();
   const { isLoading, error, posts } = useSelector((state) => state.post);
 
-  const openModal = () => {
+  const openCreateModal = () => {
     setIsModalOpen(true);
   };
+  const closeCreateModal = () => {
+    setIsModalOpen(false);
+  };
 
-  const closeModal = () => {
+  const openLoginModal = () => {
+    setIsModalOpen(true);
+  };
+  const closeLoginModal = () => {
     setIsModalOpen(false);
   };
 
@@ -54,10 +61,8 @@ export default function Home() {
         <St.Nav>
           <Image src={kanbanLogo} alt="Title Logo" width={160} height={40} />
           <St.BtnWrap>
-            <St.Button onClick={openModal}>글쓰기</St.Button>
-            <St.Button>
-              <St.StyledLink href="/login">로그인</St.StyledLink>
-            </St.Button>
+            <St.Button onClick={openCreateModal}>글쓰기</St.Button>
+            <St.Button onClick={openLoginModal}>로그인</St.Button>
           </St.BtnWrap>
         </St.Nav>
         <St.BannerWrap></St.BannerWrap>
@@ -81,11 +86,15 @@ export default function Home() {
         </St.RePostWrap>
         <div ref={ref} />
         <St.Footer>© Copyright Team 6. All rights reserved</St.Footer>
+        <DndContainer />
       </St.BodyWrap>
       {isModalOpen && (
-        <St.ModalWrap onClick={isModalOpen ? closeModal : undefined}>
+        <St.ModalWrap onClick={isModalOpen ? closeCreateModal : undefined}>
           <St.Modal>
-            <Create closeModal={closeModal} setMainPageKey={setMainPageKey} />
+            <Create
+              closeModal={closeCreateModal}
+              setMainPageKey={setMainPageKey}
+            />
           </St.Modal>
         </St.ModalWrap>
       )}

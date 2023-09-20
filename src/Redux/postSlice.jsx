@@ -1,13 +1,19 @@
 "use client";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "../api/instance";
+
+/**
+ * @author : Goya Gim
+ * @includes : Get server data from api and send it to the
+ *             app/page.jsx
+ *             Redux Toolkit & thunk
+ */
 
 export const __getPost = createAsyncThunk(
   "posts/getPost",
   async (payload, thunkAPI) => {
-    const API = "http://localhost:4000/test";
     try {
-      const res = await axios.get(API);
+      const res = await axios.get("/test");
       console.log(res.data);
       return res.data;
     } catch (error) {

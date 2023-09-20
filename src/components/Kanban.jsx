@@ -13,9 +13,10 @@ export function Kanban({ id, title }) {
           router.push(`/detail/${id}`);
         }}
       >
-        <span>게시글 성격</span>
         <h4>{title}</h4>
-        <span>좋아요 / 코멘트 아이콘</span>
+        <span>nickname</span>
+        <br />
+        <span>♥︎ / 💬</span>
       </St.Box>
     </>
   );

@@ -1,40 +1,30 @@
 {
   "token": {
-    "access_token": "9k3kljnslkdj_34lk2j34lks09sv",
-    "userId": 123
+    "access_token": "9k3kljnslkdj_34lk2j34lks09sv"
   },
   "test": [
     {
-      "username": "test1234",
-      "title": "데이터 1",
-      "contents": "텍스트 내용",
+      "nickname": "testadmin",
       "id": "1",
+      "title": "샘플 데이터 1",
+      "contents": "텍스트 내용",
       "createdAt": "2023-09-05T14:26:03.756415",
       "modifiedAt": "2023-09-05T11:55:44.731449"
     },
     {
-      "username": "test1234",
-      "title": "데이터 2",
-      "contents": "텍스트 내용",
-      "id": "2",
-      "createdAt": "2023-09-05T14:26:03.756415",
-      "modifiedAt": "2023-09-05T11:55:44.731449"
+      "title": "CSS를 죽이고 싶다",
+      "contents": "123",
+      "id": "tz7OFmp"
     },
     {
-      "username": "test1234",
-      "title": "데이터 3",
-      "contents": "텍스트 내용",
-      "id": "3",
-      "createdAt": "2023-09-05T14:26:03.756415",
-      "modifiedAt": "2023-09-05T11:55:44.731449"
+      "title": "샘플 데이터 2",
+      "contents": "123",
+      "id": "v92mHo9"
     },
     {
-      "username": "test1234",
-      "title": "데이터 4",
-      "contents": "텍스트 내용",
-      "id": "4",
-      "createdAt": "2023-09-05T14:26:03.756415",
-      "modifiedAt": "2023-09-05T11:55:44.731449"
+      "title": "CSS를 죽이고 싶다",
+      "contents": "123",
+      "id": "7knCzaY"
     }
   ]
 }

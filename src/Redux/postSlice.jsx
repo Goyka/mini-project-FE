@@ -3,16 +3,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const __getPost = createAsyncThunk(
-  "post/getPost",
+  "posts/getPost",
   async (payload, thunkAPI) => {
-    const { title, id } = payload;
+    const API = "http://localhost:4000/test";
     try {
-      const response = await axios.get("http://localhost:4000/test", {
-        title,
-        id,
-      });
-      console.log(response);
-      return response.data;
+      const res = await axios.get(API);
+      console.log(res.data);
+      return res.data;
     } catch (error) {
       console.error(error);
       throw error;
@@ -37,7 +34,7 @@ const postSlice = createSlice({
       })
       .addCase(__getPost.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.posts = action.payload;
+        state.posts = { ...state.posts, ...action.payload };
       })
       .addCase(__getPost.rejected, (state, action) => {
         state.isLoading = false;

@@ -75,12 +75,14 @@ export default function Home() {
             <p>Can? Ban! 💢</p>
           </div>
           <St.RecentPost>
-            {posts.length > 0 ? (
-              posts.map((post) => (
+            {isLoading ? (
+              <div>Loading...</div>
+            ) : error ? (
+              <div>Error: {error.message}</div>
+            ) : (
+              Object.values(posts).map((post) => (
                 <Kanban key={post.id} id={post.id} title={post.title} />
               ))
-            ) : (
-              <div />
             )}
           </St.RecentPost>
         </St.RePostWrap>

@@ -1,0 +1,39 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "content": "typicode"
+    },
+    {
+      "id": 2,
+      "title": "json",
+      "content": "typi"
+    },
+    {
+      "id": 3,
+      "title": "server",
+      "content": "code"
+    },
+    {
+      "title": "titile",
+      "content": "content",
+      "id": 4
+    },
+    {
+      "title": "next",
+      "content": "react next",
+      "id": 5
+    },
+    {
+      "title": "A",
+      "content": "A",
+      "id": 6
+    },
+    {
+      "title": "B",
+      "content": "B",
+      "id": 7
+    }
+  ]
+}

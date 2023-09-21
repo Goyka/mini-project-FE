@@ -11,7 +11,7 @@ import Spinner from "/Users/gim.goya/Desktop/Hanghae99/Mini/kanban/public/Spinne
 export const Loading = () => {
   return (
     <St.Background>
-      <Image src={Spinner} alt="spinner"></Image>
+      <Image src={Spinner} alt="spinner" priority></Image>
     </St.Background>
   );
 };

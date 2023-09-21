@@ -1,17 +1,35 @@
 import axios from "@/api/instance";
 import React from "react";
 
-const EditContent = () => {
+/**
+ * @author : Kwonyeong Kang, Goya Gim
+ * @includes : Modal component for the read page.
+ */
+
+const EditContent = ({ id, closeModal, setMainPageKey }) => {
   const [createTitle, setCreateTitle] = useState("");
   const [createBody, setCreateBody] = useState("");
-  const EditHandler = async () => {
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`/api/posts/${id}`);
+        setCreateTitle(res.data.title);
+        setCreateBody(res.data.content);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [id]);
+
+  const EditHandler = async (e) => {
     try {
-      const res = await axios.patch("/api/post" + id, {
+      const res = await axios.put(`/api/post/${id}`, {
         title,
         content,
       });
-      setCreateTitle(res.data.title);
-      setCreateBody(res.data.content);
+      e.stopPropagation();
       closeModal();
       setMainPageKey((prevKey) => prevKey + 1);
     } catch (error) {

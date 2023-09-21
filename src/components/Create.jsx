@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import axios from "../api/instance";
 import * as St from "../styles/styles";
+import { getToken } from "@/util/token";
 
 /**
  * @author : Goya Gim
@@ -11,7 +12,7 @@ import * as St from "../styles/styles";
 export default function Create({ closeModal, setMainPageKey }) {
   const [createTitle, setCreateTitle] = useState("");
   const [createBody, setCreateBody] = useState("");
-  const token = sessionStorage.getItem("token");
+  const token = getToken();
 
   // useEffect(() => {
   //   // 토큰이 없을 시, 접근 인가를 거절
@@ -23,12 +24,16 @@ export default function Create({ closeModal, setMainPageKey }) {
   const onSaveHandler = async (e) => {
     try {
       const res = await axios.post(
-        "/api/post",
+        "/api/posts",
         {
           title: createTitle,
           content: createBody,
         },
-        config
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
       );
       e.stopPropagation();
       setCreateTitle(res.data.title);

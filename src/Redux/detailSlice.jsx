@@ -2,18 +2,23 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../api/instance";
 
+/**
+ * @author : Goya Gim
+ * @includes : Create Slice for getting read page content.
+ */
+
 export const __getPostDetail = createAsyncThunk(
   "posts/detailPost",
   async (payload, thunkAPI) => {
     try {
-      const postId = props.params.id;
-      const res = await axios.get(`api/posts/${postId}`);
-      return res.data;
+      const res = await axios.get(`api/posts/${payload}`);
+      return res.data.data;
     } catch (error) {
       throw error;
     }
   }
 );
+
 const initialState = {
   posts: {
     id: 0,

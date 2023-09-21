@@ -14,8 +14,7 @@ export const __getPost = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const res = await axios.get("/api/posts");
-      console.log(res.data);
-      return res.data;
+      return res.data.data;
     } catch (error) {
       console.error(error);
       throw error;
@@ -24,7 +23,7 @@ export const __getPost = createAsyncThunk(
 );
 
 const initialState = {
-  posts: {},
+  posts: [],
   isLoading: false,
   error: null,
 };

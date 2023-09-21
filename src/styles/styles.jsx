@@ -137,21 +137,14 @@ export const ModalWrap = styled.div`
   background-color: rgba(0, 0, 0, 0.1);
   justify-content: center;
   align-items: center;
-
-  ${(props) =>
-    props.disableBackground &&
-    css`
-      /* 백그라운드 컬러를 비활성화하는 스타일 */
-      background-color: transparent;
-    `}
 `;
 export const Modal = styled.div`
   display: flex;
   flex-direction: column;
   background-color: white;
   width: 400px;
-  height: 400px;
-  padding: 20px;
+  height: 250px;
+  padding: 10px;
   border-radius: 15px;
   justify-content: center;
   align-items: center;
@@ -180,12 +173,33 @@ export const LoadingText = styled.div`
 
 // detail page
 export const ContentBox = styled.div`
-  background-color: #ffffff;
-
+  background-color: yellow;
   width: 500px;
   height: 300px;
   padding: 20px;
   border: 2px solid lightgray;
   border-radius: 17px;
   margin: 0 auto;
+`;
+
+export const ErrorMessage = styled.div`
+  max-width: 200px;
+  color: red;
+  font-size: 12px;
+  margin: 2px;
+`;
+
+export const Input = styled.input`
+  margin: 5px 0 5px 0;
+  width: 200px;
+  height: 22px;
+  border-radius: 5px;
+  border: 2px solid lightgray;
+  font-size: 12px;
+  text-align: center;
+`;
+export const Col = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: ${(props) => props && props.margin};
 `;

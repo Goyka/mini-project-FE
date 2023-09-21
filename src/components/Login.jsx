@@ -6,11 +6,11 @@ import { getToken, setToken } from "@/util/token";
 import { Register } from "./Register";
 
 /**
- * @author : Goya Gim
+ * @author : Won Heo, Goya Gim
  * @includes : Makes login function based on server data.
  */
 
-export default function Login({ closeModal, setMainPageKey }) {
+export default function Login({ closeModal }) {
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -25,12 +25,12 @@ export default function Login({ closeModal, setMainPageKey }) {
 
   const checkUser = async () => {
     try {
-      const response = await axios.get("/api/user/login", {
+      const response = await axios.get("/api/users/login", {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("Authorization")}`,
         },
       });
-      console.log(response.data.message, response);
+      console.log("유저 인증 ->", response);
     } catch (error) {
       console.error(error);
       alert(error.response.data.message);
@@ -40,23 +40,21 @@ export default function Login({ closeModal, setMainPageKey }) {
     e.preventDefault();
 
     try {
-      const response = await axios.post("/api/user/login", {
+      const response = await axios.post("/api/users/login", {
         username,
         password,
       });
       e.stopPropagation();
-      console.log(response.statusText, response);
-      // console.log(response.config.data);
+      console.log("로그인 요청 ->", response);
 
       if (response.status === 200) {
-        setToken(response.data.token);
+        setToken(response.headers.authorization);
         checkUser();
+        window.location.reload();
         closeModal();
-        setMainPageKey((prevKey) => prevKey + 1);
       }
     } catch (error) {
       console.error(error);
-      alert(error.response.data.message);
     }
   };
 
@@ -64,18 +62,17 @@ export default function Login({ closeModal, setMainPageKey }) {
     <St.ModalWrap>
       <St.Modal>
         <>
-          <div>
-            <h4>로그인</h4>
-          </div>
-          <input
+          <St.Input
             type="text"
+            name="id"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             onClick={(e) => e.stopPropagation()}
             placeholder="id"
           />
-          <input
+          <St.Input
             type="password"
+            name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onClick={(e) => e.stopPropagation()}
@@ -98,12 +95,9 @@ export default function Login({ closeModal, setMainPageKey }) {
         </>
       </St.Modal>
       {isRegisterOpen && (
-        <St.ModalWrap
-          onClick={isRegisterOpen ? closeRegisterModal : undefined}
-          disableBackground
-        >
+        <St.ModalWrap onClick={isRegisterOpen ? closeRegisterModal : undefined}>
           <St.Modal>
-            <Register closeModal={closeModal} setMainPageKey={setMainPageKey} />
+            <Register closeModal={closeModal} />
           </St.Modal>
         </St.ModalWrap>
       )}

@@ -1,5 +1,11 @@
+"use client";
 import React from "react";
-import * as St from "../styles/styles";
+import * as St from "@/styles/styles";
+
+/**
+ * @author : Kwonyeong Kang, Goya Gim
+ * @includes : Create component for read/[id] page.
+ */
 
 const ReadContent = ({ nickname, title, content }) => {
   return (

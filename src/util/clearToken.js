@@ -3,15 +3,15 @@ import { getToken } from "./token";
 
 export const clearToken = async () => {
   const token = getToken();
-
   try {
-    const response = await axios.get("/api/user/login", {
+    const response = await axios.get("/api/users/login", {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
+
     if (response.status === 200) {
-      sessionStorage.clear();
+      localStorage.removeItem("Authorization");
       console.log("토큰이 제거되었습니다 ->", response);
     }
   } catch (error) {

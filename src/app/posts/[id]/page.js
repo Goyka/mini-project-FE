@@ -5,33 +5,38 @@ import { __getPostDetail } from "@/Redux/detailSlice";
 import Loading from "@/components/Loading";
 import ReadContent from "@/components/ReadContent";
 import EditContent from "@/components/EditContent";
-import * as St from "../styles/styles";
+import { useParams } from "next/navigation";
+import * as St from "@/styles/styles";
 
 import Image from "next/image";
 import kanbanLogo from "/public/kanbanLogo.png";
 
 /**
- * @author : Goya Gim
+ * @author : Kwonyeong Kang, Goya Gim
+ * @include : page route for content read. contain ReadContent.jsx / EditContent.jsx
  */
 
-export default async function Read({
+export default function Read({
   openCreateModal,
   openLoginModal,
   closeCreateModal,
   closeLoginModal,
   logoutHandler,
 }) {
+  // posts/[id]/[userId]
+  // prams = {id: "", userId: ""}
+  const params = useParams();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isTokenIn, setIsTokenIn] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [mainPageKey, setMainPageKey] = useState(0);
   const dispatch = useDispatch();
-  const { isLoading, error, posts } = useSelector((state) => state.post);
+  const { isLoading, error, posts } = useSelector((state) => state.detail);
 
   useEffect(() => {
-    dispatch(__getPostDetail());
-  }, [dispatch]);
+    dispatch(__getPostDetail(params.id));
+  }, []);
 
   const openEditModal = () => {
     setIsEditOpen(true);
@@ -72,20 +77,18 @@ export default async function Read({
             ) : error ? (
               <div>Error: {error.message}</div>
             ) : (
-              Object.values(posts).map((post) => (
-                <>
-                  <ReadContent
-                    key={post.id}
-                    id={post.id}
-                    nickname={post.nickname}
-                    title={post.title}
-                    content={post.content}
-                  />
-                  <St.Button onClick={openEditModal} buttontheme="secondary">
-                    수정
-                  </St.Button>
-                </>
-              ))
+              <>
+                <ReadContent
+                  key={posts.id}
+                  id={posts.id}
+                  nickname={posts.nickname}
+                  title={posts.title}
+                  content={posts.content}
+                />
+                <St.Button onClick={openEditModal} buttontheme="secondary">
+                  수정
+                </St.Button>
+              </>
             )}
           </St.RecentPost>
         </St.RePostWrap>

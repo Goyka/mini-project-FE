@@ -3,9 +3,9 @@
  */
 
 export const setToken = (token) => {
-  sessionStorage.setItem("Authorization", token);
+  localStorage.setItem("Authorization", token);
 };
 
 export const getToken = () => {
-  return sessionStorage.getItem("Authorization");
+  return localStorage.getItem("Authorization");
 };

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { __getPost } from "../Redux/postSlice";
 import { clearToken } from "@/util/clearToken";
+import { getToken } from "@/util/token";
 import { useInView } from "react-intersection-observer";
 
 import { Kanban } from "@/components/Kanban";
@@ -13,6 +14,7 @@ import Login from "@/components/Login";
 import * as St from "../styles/styles";
 import Image from "next/image";
 import kanbanLogo from "/public/kanbanLogo.png";
+import { useRouter } from "next/navigation";
 
 /**
  * @author : Goya Gim
@@ -27,6 +29,7 @@ export default function Home() {
   const [mainPageKey, setMainPageKey] = useState(0);
   const [ref, inView] = useInView();
   const dispatch = useDispatch();
+  const router = useRouter();
   const { isLoading, error, posts } = useSelector((state) => state.post);
 
   const openCreateModal = () => {
@@ -41,29 +44,29 @@ export default function Home() {
   const closeLoginModal = () => {
     setIsLoginOpen(false);
   };
-  const getToken = () => {
-    const token = sessionStorage.getItem("Authorization");
-    if (token) {
-      setIsTokenIn(true);
-    }
-  };
-  const logoutHandler = () => {
-    const token = sessionStorage.getItem("Authorization");
-    clearToken();
-    if (!token) {
-      setIsTokenIn(false);
-    }
+
+  const logoutHandler = async () => {
+    await clearToken();
+    setIsTokenIn(!isTokenIn);
   };
 
   useEffect(() => {
+    const token = getToken();
+    if (!token) {
+      setIsTokenIn(false);
+    } else {
+      setIsTokenIn(!isTokenIn);
+    }
+  }, []);
+
+  useEffect(() => {
     dispatch(__getPost());
-    getToken();
   }, [dispatch]);
 
   useEffect(() => {
     if (inView) {
       dispatch(__getPost());
-      console.log(inView);
+      console.log("인피니트 스크롤 ->", inView);
     }
   }, [inView]);
 
@@ -75,11 +78,22 @@ export default function Home() {
     <St.Container>
       <St.Header>
         <St.Nav>
-          <Image src={kanbanLogo} alt="Title Logo" width={160} height={40} />
+          <Image
+            src={kanbanLogo}
+            alt="Title Logo"
+            width={160}
+            height={40}
+            priority
+          />
           <St.BtnWrap>
-            <St.Button onClick={openCreateModal} buttontheme="primary">
-              글쓰기
-            </St.Button>
+            {!isTokenIn ? (
+              <p />
+            ) : (
+              <St.Button onClick={openCreateModal} buttontheme="primary">
+                글쓰기
+              </St.Button>
+            )}
+
             {isTokenIn ? (
               <St.Button onClick={logoutHandler} buttontheme="secondary">
                 로그아웃
@@ -104,8 +118,13 @@ export default function Home() {
             ) : error ? (
               <div>Error: {error.message}</div>
             ) : (
-              Object.values(posts).map((post) => (
-                <Kanban key={post.id} id={post.id} title={post.title} />
+              Object.values(posts).map((data) => (
+                <Kanban
+                  key={data.id}
+                  id={data.id}
+                  nickname={data.nickname}
+                  title={data.title}
+                />
               ))
             )}
           </St.RecentPost>

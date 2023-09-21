@@ -22,7 +22,7 @@ export default function Create({ closeModal, setMainPageKey }) {
 
   const onSaveHandler = async (e) => {
     try {
-      const response = await axios.post(
+      const res = await axios.post(
         "/api/post",
         {
           title: createTitle,
@@ -31,8 +31,8 @@ export default function Create({ closeModal, setMainPageKey }) {
         config
       );
       e.stopPropagation();
-      setCreateTitle(response.data.title);
-      setCreateBody(response.data.content);
+      setCreateTitle(res.data.title);
+      setCreateBody(res.data.content);
       closeModal();
       setMainPageKey((prevKey) => prevKey + 1);
     } catch (error) {
@@ -60,7 +60,9 @@ export default function Create({ closeModal, setMainPageKey }) {
             onClick={(e) => e.stopPropagation()}
           />
         </>
-        <St.Button onClick={onSaveHandler}> 등록하기 </St.Button>
+        <St.Button onClick={onSaveHandler} buttontheme="primary">
+          등록하기
+        </St.Button>
       </St.Modal>
     </St.ModalWrap>
   );

@@ -2,6 +2,10 @@
   "token": {
     "access_token": "9k3kljnslkdj_34lk2j34lks09sv"
   },
+  "user": {
+    "username": "jaeha",
+    "password": "12345"
+  },
   "test": [
     {
       "nickname": "testadmin",

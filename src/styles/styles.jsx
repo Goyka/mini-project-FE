@@ -1,5 +1,9 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Link from "next/link";
+
+/**
+ * @author : Goya Gim
+ */
 
 export const Container = styled.div`
   margin: 0 auto;
@@ -27,21 +31,42 @@ export const Nav = styled.div`
   justify-content: space-between;
   padding: 20px;
 `;
+
 export const BtnWrap = styled.div`
   padding: 10px;
 `;
+
+// Button Theme & Button Components
+export const theme = {
+  primary: css`
+    background-color: #d32f2f;
+    color: white;
+  `,
+  secondary: css`
+    background-color: white;
+    color: #d32f2f;
+    border: 2px solid #d32f2f;
+  `,
+};
+
 export const Button = styled.button`
-  background-color: #d32f2f;
   text-align: center;
   margin: 0 3px 0 3px;
   width: 83px;
   height: 35px;
   border-radius: 9px;
   border: none;
-  color: white;
   font-weight: 600;
   cursor: pointer;
+
+  &:hover {
+    filter: brightness(0.95);
+  }
+  ${({ buttontheme }) => buttontheme === "primary" && theme.primary};
+  ${({ buttontheme }) => buttontheme === "secondary" && theme.secondary};
 `;
+Button.shouldForwardProp = (prop) => prop !== "buttontheme";
+
 export const StyledLink = styled(Link)`
   color: white;
   font-weight: 600;
@@ -109,9 +134,16 @@ export const ModalWrap = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.15);
+  background-color: rgba(0, 0, 0, 0.1);
   justify-content: center;
   align-items: center;
+
+  ${(props) =>
+    props.disableBackground &&
+    css`
+      /* 백그라운드 컬러를 비활성화하는 스타일 */
+      background-color: transparent;
+    `}
 `;
 export const Modal = styled.div`
   display: flex;
@@ -121,7 +153,6 @@ export const Modal = styled.div`
   height: 400px;
   padding: 20px;
   border-radius: 15px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -145,4 +176,16 @@ export const Background = styled.div`
 export const LoadingText = styled.div`
   font: 1rem "Noto Sans KR";
   text-align: center;
+`;
+
+// detail page
+export const ContentBox = styled.div`
+  background-color: #ffffff;
+
+  width: 500px;
+  height: 300px;
+  padding: 20px;
+  border: 2px solid lightgray;
+  border-radius: 17px;
+  margin: 0 auto;
 `;

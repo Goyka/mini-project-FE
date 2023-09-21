@@ -2,16 +2,17 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { __getPost } from "../Redux/postSlice";
+import { clearToken } from "@/util/clearToken";
 import { useInView } from "react-intersection-observer";
 
 import { Kanban } from "@/components/Kanban";
 import Create from "@/components/Create";
 import Loading from "@/components/Loading";
+import Login from "@/components/Login";
 
 import * as St from "../styles/styles";
 import Image from "next/image";
 import kanbanLogo from "/public/kanbanLogo.png";
-import { DndContainer } from "@/components/DndContainer";
 
 /**
  * @author : Goya Gim
@@ -20,28 +21,43 @@ import { DndContainer } from "@/components/DndContainer";
  */
 
 export default function Home() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isTokenIn, setIsTokenIn] = useState(false);
   const [mainPageKey, setMainPageKey] = useState(0);
   const [ref, inView] = useInView();
   const dispatch = useDispatch();
   const { isLoading, error, posts } = useSelector((state) => state.post);
 
   const openCreateModal = () => {
-    setIsModalOpen(true);
+    setIsCreateOpen(true);
   };
   const closeCreateModal = () => {
-    setIsModalOpen(false);
+    setIsCreateOpen(false);
   };
-
   const openLoginModal = () => {
-    setIsModalOpen(true);
+    setIsLoginOpen(true);
   };
   const closeLoginModal = () => {
-    setIsModalOpen(false);
+    setIsLoginOpen(false);
+  };
+  const getToken = () => {
+    const token = sessionStorage.getItem("Authorization");
+    if (token) {
+      setIsTokenIn(true);
+    }
+  };
+  const logoutHandler = () => {
+    const token = sessionStorage.getItem("Authorization");
+    clearToken();
+    if (!token) {
+      setIsTokenIn(false);
+    }
   };
 
   useEffect(() => {
     dispatch(__getPost());
+    getToken();
   }, [dispatch]);
 
   useEffect(() => {
@@ -61,8 +77,18 @@ export default function Home() {
         <St.Nav>
           <Image src={kanbanLogo} alt="Title Logo" width={160} height={40} />
           <St.BtnWrap>
-            <St.Button onClick={openCreateModal}>글쓰기</St.Button>
-            <St.Button onClick={openLoginModal}>로그인</St.Button>
+            <St.Button onClick={openCreateModal} buttontheme="primary">
+              글쓰기
+            </St.Button>
+            {isTokenIn ? (
+              <St.Button onClick={logoutHandler} buttontheme="secondary">
+                로그아웃
+              </St.Button>
+            ) : (
+              <St.Button onClick={openLoginModal} buttontheme="primary">
+                로그인
+              </St.Button>
+            )}
           </St.BtnWrap>
         </St.Nav>
         <St.BannerWrap></St.BannerWrap>
@@ -86,13 +112,22 @@ export default function Home() {
         </St.RePostWrap>
         <div ref={ref} />
         <St.Footer>© Copyright Team 6. All rights reserved</St.Footer>
-        <DndContainer />
       </St.BodyWrap>
-      {isModalOpen && (
-        <St.ModalWrap onClick={isModalOpen ? closeCreateModal : undefined}>
+      {isCreateOpen && (
+        <St.ModalWrap onClick={isCreateOpen ? closeCreateModal : undefined}>
           <St.Modal>
             <Create
               closeModal={closeCreateModal}
+              setMainPageKey={setMainPageKey}
+            />
+          </St.Modal>
+        </St.ModalWrap>
+      )}
+      {isLoginOpen && (
+        <St.ModalWrap onClick={isLoginOpen ? closeLoginModal : undefined}>
+          <St.Modal>
+            <Login
+              closeModal={closeLoginModal}
               setMainPageKey={setMainPageKey}
             />
           </St.Modal>

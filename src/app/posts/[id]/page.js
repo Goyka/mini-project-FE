@@ -2,42 +2,53 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { __getPostDetail } from "@/Redux/detailSlice";
+import { useParams, useRouter } from "next/navigation";
+import axios from "@/api/instance";
+
 import Loading from "@/components/Loading";
 import ReadContent from "@/components/ReadContent";
 import EditContent from "@/components/EditContent";
-import { useParams } from "next/navigation";
-import * as St from "@/styles/styles";
+import Create from "@/components/Create";
 
+import * as St from "@/styles/styles";
+import * as Pg from "@/styles/pagestyles";
 import Image from "next/image";
-import kanbanLogo from "/public/kanbanLogo.png";
+import kanlogo from "/public/kanlogo.png";
+
+import isUserFit from "@/util/isUserFit";
+import { getToken } from "@/util/token";
 
 /**
  * @author : Kwonyeong Kang, Goya Gim
  * @include : page route for content read. contain ReadContent.jsx / EditContent.jsx
  */
 
-export default function Read({
-  openCreateModal,
-  openLoginModal,
-  closeCreateModal,
-  closeLoginModal,
-  logoutHandler,
-}) {
-  // posts/[id]/[userId]
-  // prams = {id: "", userId: ""}
+export default function Read() {
   const params = useParams();
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isTokenIn, setIsTokenIn] = useState(false);
-  const [isEditOpen, setIsEditOpen] = useState(false);
-  const [mainPageKey, setMainPageKey] = useState(0);
+  const router = useRouter();
   const dispatch = useDispatch();
   const { isLoading, error, posts } = useSelector((state) => state.detail);
 
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isTokenIn, setIsTokenIn] = useState(false);
+  const [mainPageKey, setMainPageKey] = useState(0);
+
+  const [userNickname, setUserNickname] = useState("");
+  const token = getToken();
+
   useEffect(() => {
     dispatch(__getPostDetail(params.id));
+    const userNicknameData = isUserFit();
+    setUserNickname(userNicknameData);
   }, []);
 
+  const openCreateModal = () => {
+    setIsCreateOpen(true);
+  };
+  const closeCreateModal = () => {
+    setIsCreateOpen(false);
+  };
   const openEditModal = () => {
     setIsEditOpen(true);
   };
@@ -45,39 +56,66 @@ export default function Read({
     setIsEditOpen(false);
   };
 
+  const logoutHandler = () => {
+    const removeToken = () => {
+      localStorage.removeItem("Authorization");
+    };
+    removeToken();
+    setIsTokenIn(!isTokenIn);
+    router.push("/");
+  };
+  const deletePost = async (e) => {
+    try {
+      const res = await axios.delete(`/api/posts/${params.id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+        withCredentials: true,
+      });
+      if (res.status === 200) {
+        e.stopPropagation();
+        router.push("/");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
-    <St.Container>
-      <St.Header>
-        <St.Nav>
-          <Image src={kanbanLogo} alt="Title Logo" width={160} height={40} />
-          <St.BtnWrap>
+    <Pg.Container>
+      <Pg.Header>
+        <Pg.Nav>
+          <Image
+            src={kanlogo}
+            priority
+            alt="Title Logo"
+            width={230}
+            height={70}
+            onClick={() => {
+              router.push("/");
+            }}
+            style={{ cursor: "pointer" }}
+          />
+          <Pg.BtnWrap>
             <St.Button onClick={openCreateModal} buttontheme="primary">
               글쓰기
             </St.Button>
-            {isTokenIn ? (
-              <St.Button onClick={logoutHandler} buttontheme="secondary">
-                로그아웃
-              </St.Button>
-            ) : (
-              <St.Button onClick={openLoginModal} buttontheme="primary">
-                로그인
-              </St.Button>
-            )}
-          </St.BtnWrap>
-        </St.Nav>
-      </St.Header>
-      <St.BodyWrap>
-        <St.RePostWrap>
-          <div>
-            <h3>페이지 제목</h3>
-          </div>
-          <St.RecentPost>
+            <St.Button onClick={logoutHandler} buttontheme="secondary">
+              로그아웃
+            </St.Button>
+          </Pg.BtnWrap>
+        </Pg.Nav>
+      </Pg.Header>
+      <Pg.BodyWrap>
+        <Pg.RePostWrap>
+          <Pg.RecentPost>
             {isLoading ? (
               <Loading />
             ) : error ? (
               <div>Error: {error.message}</div>
             ) : (
-              <>
+              <St.ContentWrap>
                 <ReadContent
                   key={posts.id}
                   id={posts.id}
@@ -85,15 +123,26 @@ export default function Read({
                   title={posts.title}
                   content={posts.content}
                 />
-                <St.Button onClick={openEditModal} buttontheme="secondary">
-                  수정
-                </St.Button>
-              </>
+                <div>
+                  {userNickname === posts.nickname ? (
+                    <>
+                      <St.Button onClick={openEditModal} buttontheme="primary">
+                        수정
+                      </St.Button>
+                      <St.Button onClick={deletePost} buttontheme="secondary">
+                        삭제
+                      </St.Button>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              </St.ContentWrap>
             )}
-          </St.RecentPost>
-        </St.RePostWrap>
-        <St.Footer>© Copyright Team 6. All rights reserved</St.Footer>
-      </St.BodyWrap>
+          </Pg.RecentPost>
+        </Pg.RePostWrap>
+        <Pg.Footer>© Copyright Team 6. All rights reserved</Pg.Footer>
+      </Pg.BodyWrap>
       {isEditOpen && (
         <St.ModalWrap onClick={isEditOpen ? closeEditModal : undefined}>
           <St.Modal>
@@ -114,16 +163,6 @@ export default function Read({
           </St.Modal>
         </St.ModalWrap>
       )}
-      {isLoginOpen && (
-        <St.ModalWrap onClick={isLoginOpen ? closeLoginModal : undefined}>
-          <St.Modal>
-            <Login
-              closeModal={closeLoginModal}
-              setMainPageKey={setMainPageKey}
-            />
-          </St.Modal>
-        </St.ModalWrap>
-      )}
-    </St.Container>
+    </Pg.Container>
   );
 }

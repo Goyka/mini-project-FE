@@ -1,16 +1,18 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "../api/instance";
-import * as St from "../styles/styles";
-import { getToken, setToken } from "@/util/token";
+import { useDispatch } from "react-redux";
+
+import { setToken } from "@/util/token";
 import { Register } from "./Register";
+import * as St from "../styles/styles";
 
 /**
  * @author : Won Heo, Goya Gim
  * @includes : Makes login function based on server data.
  */
 
-export default function Login({ closeModal }) {
+export default function Login({ closeModal, setMainPageKey }) {
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -22,36 +24,19 @@ export default function Login({ closeModal }) {
   const closeRegisterModal = () => {
     setIsRegisterOpen(false);
   };
-
-  const checkUser = async () => {
-    try {
-      const response = await axios.get("/api/users/login", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("Authorization")}`,
-        },
-      });
-      console.log("유저 인증 ->", response);
-    } catch (error) {
-      console.error(error);
-      alert(error.response.data.message);
-    }
-  };
   const onLoginHandler = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await axios.post("/api/users/login", {
+      const res = await axios.post("/api/users/login", {
         username,
         password,
       });
       e.stopPropagation();
-      console.log("로그인 요청 ->", response);
 
-      if (response.status === 200) {
-        setToken(response.headers.authorization);
-        checkUser();
-        window.location.reload();
+      if (res.status === 200) {
+        setToken(res.headers.authorization);
         closeModal();
+        window.location.reload();
       }
     } catch (error) {
       console.error(error);
@@ -88,7 +73,11 @@ export default function Login({ closeModal }) {
             <St.Button onClick={onLoginHandler} buttontheme="primary">
               로그인
             </St.Button>
-            <St.Button onClick={openRegisterModal} buttontheme="secondary">
+            <St.Button
+              onClick={openRegisterModal}
+              setmainpagekey={setMainPageKey}
+              buttontheme="secondary"
+            >
               회원가입
             </St.Button>
           </div>

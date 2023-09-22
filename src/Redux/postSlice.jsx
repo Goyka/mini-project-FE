@@ -13,8 +13,10 @@ export const __getPost = createAsyncThunk(
   "posts/getPost",
   async (payload, thunkAPI) => {
     try {
-      const res = await axios.get("/api/posts");
-      return res.data.data;
+      const res = await axios.get("/api/posts?page=1&size=60");
+      // const len = res.data.data.content[0].commentList;
+      console.log(res.data.data.content);
+      return res.data.data.content;
     } catch (error) {
       console.error(error);
       throw error;
@@ -23,13 +25,13 @@ export const __getPost = createAsyncThunk(
 );
 
 const initialState = {
-  posts: [],
+  posts: {},
   isLoading: false,
   error: null,
 };
 
 const postSlice = createSlice({
-  name: "post",
+  name: "posts",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

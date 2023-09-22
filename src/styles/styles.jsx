@@ -1,51 +1,16 @@
 import styled, { css } from "styled-components";
 import Link from "next/link";
 
-/**
- * @author : Goya Gim
- */
-
-export const Container = styled.div`
-  margin: 0 auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  max-width: 1450px;
-`;
-export const Header = styled.header`
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  padding: 7px;
-  width: 100%;
-  max-width: 1150px;
-  position: fixed;
-  top: 0;
-`;
-export const Nav = styled.div`
-  background-color: transparent;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 20px;
-`;
-
-export const BtnWrap = styled.div`
-  padding: 10px;
-`;
-
 // Button Theme & Button Components
 export const theme = {
   primary: css`
-    background-color: #d32f2f;
-    color: white;
+    background-color: black;
+    color: #00ccd8;
   `,
   secondary: css`
     background-color: white;
-    color: #d32f2f;
-    border: 2px solid #d32f2f;
+    color: black;
+    border: 2px solid black;
   `,
 };
 
@@ -54,7 +19,7 @@ export const Button = styled.button`
   margin: 0 3px 0 3px;
   width: 83px;
   height: 35px;
-  border-radius: 9px;
+  border-radius: 39px;
   border: none;
   font-weight: 600;
   cursor: pointer;
@@ -72,42 +37,6 @@ export const StyledLink = styled(Link)`
   font-weight: 600;
   text-decoration: none;
 `;
-export const BannerWrap = styled.div`
-  background-color: transparent;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-export const BodyWrap = styled.div`
-  margin: 130px auto;
-
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-`;
-export const RePostWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-
-  margin-top: 50px;
-`;
-export const RecentPost = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 10px;
-  width: 1000px;
-`;
-
-export const Footer = styled.footer`
-  margin-top: 200px;
-`;
 
 export const Box = styled.div`
   background-color: #ffffff;
@@ -117,9 +46,9 @@ export const Box = styled.div`
   height: 100px;
   padding: 20px;
   border: 1.5px solid lightgray;
-  border-radius: 17px;
-  margin: 0 6px 12px 6px;
-  transition: transform 0.4s;
+  border-radius: 27px;
+  margin: 0 9px 18px 9px;
+  transition: transform 0.6s;
   cursor: pointer;
 
   &:hover {
@@ -145,7 +74,7 @@ export const Modal = styled.div`
   width: 400px;
   height: 250px;
   padding: 10px;
-  border-radius: 15px;
+  border-radius: 25px;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -172,14 +101,19 @@ export const LoadingText = styled.div`
 `;
 
 // detail page
+export const ContentWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 export const ContentBox = styled.div`
-  background-color: yellow;
-  width: 500px;
-  height: 300px;
+  background-color: transparent;
+  width: 700px;
+  height: 200px;
   padding: 20px;
   border: 2px solid lightgray;
   border-radius: 17px;
-  margin: 0 auto;
+  margin: 0 auto 10px auto;
 `;
 
 export const ErrorMessage = styled.div`

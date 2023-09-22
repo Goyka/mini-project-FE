@@ -1,5 +1,9 @@
+"use client";
+import React, { useState, useEffect } from "react";
 import axios from "@/api/instance";
-import React from "react";
+import { useParams } from "next/navigation";
+import { getToken } from "@/util/token";
+import * as St from "@/styles/styles";
 
 /**
  * @author : Kwonyeong Kang, Goya Gim
@@ -7,31 +11,47 @@ import React from "react";
  */
 
 const EditContent = ({ id, closeModal, setMainPageKey }) => {
+  const params = useParams();
+  const token = getToken();
   const [createTitle, setCreateTitle] = useState("");
   const [createBody, setCreateBody] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`/api/posts/${id}`);
-        setCreateTitle(res.data.title);
-        setCreateBody(res.data.content);
+        const res = await axios.get(`/api/posts/${params.id}`);
+        setCreateTitle(res.data.data.title);
+        setCreateBody(res.data.data.content);
       } catch (error) {
         console.error(error);
       }
     };
     fetchData();
-  }, [id]);
+  }, [params.id]);
 
   const EditHandler = async (e) => {
     try {
-      const res = await axios.put(`/api/post/${id}`, {
-        title,
-        content,
-      });
-      e.stopPropagation();
-      closeModal();
-      setMainPageKey((prevKey) => prevKey + 1);
+      const res = await axios.put(
+        `/api/posts/${params.id}`,
+        {
+          title: createTitle,
+          content: createBody,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (res.status === 200) {
+        e.stopPropagation();
+        closeModal();
+        console.log(res);
+        // window.location.reload();
+      }
     } catch (error) {
       console.error(error);
     }
@@ -55,6 +75,7 @@ const EditContent = ({ id, closeModal, setMainPageKey }) => {
             value={createBody}
             onChange={(e) => setCreateBody(e.target.value)}
             onClick={(e) => e.stopPropagation()}
+            placeholder="내용"
           />
         </>
         <St.Button onClick={EditHandler} buttontheme="primary">

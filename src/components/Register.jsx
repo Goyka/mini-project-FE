@@ -27,7 +27,7 @@ export const Register = ({ closeModal, setMainPageKey }) => {
     return regex.test(value);
   };
   const validateNickname = (value) => {
-    const regex = /^[가-힣]{3,}$/;
+    const regex = /\d{4,}/;
     return regex.test(value);
   };
 
@@ -88,7 +88,7 @@ export const Register = ({ closeModal, setMainPageKey }) => {
               handleChange={setNickname}
               handleKeyUp={validateNickname}
               errorMessage={
-                "닉네임은 3자리 이상이며, 영문은 사용할 수 없습니다."
+                "닉네임은 4자리 이상이며, 숫자만 사용할 수 있습니다."
               }
             />
             <p>비밀번호</p>

@@ -1,19 +1,21 @@
 "use client";
+// React & Redux
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { __getPost } from "../Redux/postSlice";
-import { clearToken } from "@/util/clearToken";
-import { getToken } from "@/util/token";
 import { useInView } from "react-intersection-observer";
-
+import { __getPost } from "../Redux/postSlice";
+// Styles
+import * as Pg from "@/styles/pagestyles";
+import * as St from "../styles/styles";
+import kanlogo from "/public/kanlogo.png";
+// Components
+import { getToken } from "@/util/token";
 import { Kanban } from "@/components/Kanban";
 import Create from "@/components/Create";
 import Loading from "@/components/Loading";
 import Login from "@/components/Login";
-
-import * as St from "../styles/styles";
+// Next.js
 import Image from "next/image";
-import kanbanLogo from "/public/kanbanLogo.png";
 import { useRouter } from "next/navigation";
 
 /**
@@ -23,14 +25,45 @@ import { useRouter } from "next/navigation";
  */
 
 export default function Home() {
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isTokenIn, setIsTokenIn] = useState(false);
-  const [mainPageKey, setMainPageKey] = useState(0);
-  const [ref, inView] = useInView();
   const dispatch = useDispatch();
   const router = useRouter();
-  const { isLoading, error, posts } = useSelector((state) => state.post);
+
+  const { isLoading, error, posts } = useSelector((state) => state.posts);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [isTokenIn, setIsTokenIn] = useState(false);
+  const [mainPageKey, setMainPageKey] = useState(0);
+  // For infinity Scroll
+  const [ref, inView] = useInView({
+    threshold: 1,
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(20);
+  const [moreData, setMoreData] = useState(true);
+
+  useEffect(() => {
+    const token = getToken();
+    if (!token) {
+      setIsTokenIn(false);
+    } else {
+      setIsTokenIn(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    dispatch(__getPost({ page: currentPage, perPage: postsPerPage }));
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("scroll", scrollHandler);
+    console.log("인피니트 스크롤 작동 >>>");
+    return () => {
+      window.removeEventListener("scroll", scrollHandler);
+    };
+  }, [currentPage, isLoadingMore]);
+
+  console.log("리렌더링 탐지 >>>", mainPageKey);
 
   const openCreateModal = () => {
     setIsCreateOpen(true);
@@ -45,100 +78,119 @@ export default function Home() {
     setIsLoginOpen(false);
   };
 
-  const logoutHandler = async () => {
-    await clearToken();
+  const logoutHandler = () => {
+    const removeToken = () => {
+      localStorage.removeItem("Authorization");
+    };
+    removeToken();
     setIsTokenIn(!isTokenIn);
   };
 
-  useEffect(() => {
-    const token = getToken();
-    if (!token) {
-      setIsTokenIn(false);
-    } else {
-      setIsTokenIn(!isTokenIn);
+  const scrollHandler = () => {
+    if (
+      window.innerHeight + window.scrollY >= document.body.offsetHeight - 50 &&
+      !isLoadingMore &&
+      moreData
+    ) {
+      setIsLoadingMore(true);
+      const nextPage = currentPage + 1;
+      dispatch(__getPost({ page: nextPage, perPage: postsPerPage })).then(
+        () => {
+          setCurrentPage(nextPage);
+          setIsLoadingMore(false);
+          if (!isLoading) {
+            setMoreData(false);
+          }
+        }
+      );
     }
-  }, []);
-
-  useEffect(() => {
-    dispatch(__getPost());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (inView) {
-      dispatch(__getPost());
-      console.log("인피니트 스크롤 ->", inView);
-    }
-  }, [inView]);
-
-  // const getToken = () => {
-  //   return sessionStorage.getItem("token");
-  // };
+  };
 
   return (
-    <St.Container>
-      <St.Header>
-        <St.Nav>
+    <Pg.Container>
+      <Pg.Header>
+        <Pg.Nav>
           <Image
-            src={kanbanLogo}
-            alt="Title Logo"
-            width={160}
-            height={40}
+            src={kanlogo}
             priority
+            alt="logo"
+            onClick={() => {
+              router.push("/");
+            }}
+            width={230}
+            height={70}
+            style={{
+              cursor: "pointer",
+            }}
           />
-          <St.BtnWrap>
-            {!isTokenIn ? (
-              <p />
-            ) : (
-              <St.Button onClick={openCreateModal} buttontheme="primary">
-                글쓰기
-              </St.Button>
-            )}
 
-            {isTokenIn ? (
-              <St.Button onClick={logoutHandler} buttontheme="secondary">
-                로그아웃
-              </St.Button>
-            ) : (
-              <St.Button onClick={openLoginModal} buttontheme="primary">
+          <Pg.BtnWrap>
+            {!isTokenIn ? (
+              <St.Button
+                onClick={openLoginModal}
+                style={{ marginTop: "10px" }}
+                buttontheme="primary"
+              >
                 로그인
               </St.Button>
+            ) : (
+              <>
+                {" "}
+                <St.Button
+                  onClick={openCreateModal}
+                  style={{ marginTop: "10px" }}
+                  buttontheme="primary"
+                >
+                  글쓰기
+                </St.Button>
+                <St.Button
+                  onClick={logoutHandler}
+                  style={{ marginTop: "10px" }}
+                  buttontheme="secondary"
+                >
+                  로그아웃
+                </St.Button>
+              </>
             )}
-          </St.BtnWrap>
-        </St.Nav>
-        <St.BannerWrap></St.BannerWrap>
-      </St.Header>
-      <St.BodyWrap>
-        <St.RePostWrap>
+          </Pg.BtnWrap>
+        </Pg.Nav>
+        <Pg.BannerWrap></Pg.BannerWrap>
+      </Pg.Header>
+      <Pg.BodyWrap>
+        <Pg.RePostWrap>
           <div>
             <h3>뉴스피드</h3>
           </div>
-          <St.RecentPost>
+          <Pg.RecentPost>
             {isLoading ? (
               <Loading />
             ) : error ? (
               <div>Error: {error.message}</div>
             ) : (
-              Object.values(posts).map((data) => (
-                <Kanban
-                  key={data.id}
-                  id={data.id}
-                  nickname={data.nickname}
-                  title={data.title}
-                />
-              ))
+              [...Object.values(posts)]
+                .slice(0, currentPage * postsPerPage)
+                .map((data) => (
+                  <Kanban
+                    isTokenIn={isTokenIn}
+                    key={data.id}
+                    id={data.id}
+                    nickname={data.nickname}
+                    title={data.title}
+                    commentLength={data.commentsList.length}
+                  />
+                ))
             )}
-          </St.RecentPost>
-        </St.RePostWrap>
+          </Pg.RecentPost>
+          {isLoadingMore && <Loading />}
+        </Pg.RePostWrap>
+
+        <Pg.Footer>© Copyright Team 6. All rights reserved</Pg.Footer>
         <div ref={ref} />
-        <St.Footer>© Copyright Team 6. All rights reserved</St.Footer>
-      </St.BodyWrap>
+      </Pg.BodyWrap>
       {isCreateOpen && (
         <St.ModalWrap onClick={isCreateOpen ? closeCreateModal : undefined}>
           <St.Modal>
-            <Create
-              closeModal={closeCreateModal}
-              setMainPageKey={setMainPageKey}
-            />
+            <Create closeModal={closeCreateModal} />
           </St.Modal>
         </St.ModalWrap>
       )}
@@ -147,11 +199,11 @@ export default function Home() {
           <St.Modal>
             <Login
               closeModal={closeLoginModal}
-              setMainPageKey={setMainPageKey}
+              setmainpagekey={setMainPageKey}
             />
           </St.Modal>
         </St.ModalWrap>
       )}
-    </St.Container>
+    </Pg.Container>
   );
 }

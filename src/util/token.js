@@ -1,7 +1,3 @@
-/**
- * @author : Goya Gim
- */
-
 export const setToken = (token) => {
   localStorage.setItem("Authorization", token);
 };

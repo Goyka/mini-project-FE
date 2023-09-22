@@ -1,8 +1,9 @@
 :root {
   max-width: 1150px;
+  margin: 0 auto;
 }
 body {
   background-color: transparent;
-  margin: 0;
+
   font-weight: 600;
 }

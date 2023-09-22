@@ -9,17 +9,10 @@ import { getToken } from "@/util/token";
  * @includes : Create Kanban contents and post to the server.
  */
 
-export default function Create({ closeModal, setMainPageKey }) {
+export default function Create({ closeModal }) {
   const [createTitle, setCreateTitle] = useState("");
   const [createBody, setCreateBody] = useState("");
   const token = getToken();
-
-  // useEffect(() => {
-  //   // 토큰이 없을 시, 접근 인가를 거절
-  //   if (!token) {
-  //     closeModal();
-  //   }
-  // }, []);
 
   const onSaveHandler = async (e) => {
     try {
@@ -36,10 +29,12 @@ export default function Create({ closeModal, setMainPageKey }) {
         }
       );
       e.stopPropagation();
-      setCreateTitle(res.data.title);
-      setCreateBody(res.data.content);
-      closeModal();
-      setMainPageKey((prevKey) => prevKey + 1);
+      if (res.status === 200) {
+        setCreateTitle(res.data.data.content.title);
+        setCreateBody(res.data.data.content.content);
+        closeModal();
+        window.location.reload();
+      }
     } catch (error) {
       console.error(error);
     }
@@ -50,19 +45,21 @@ export default function Create({ closeModal, setMainPageKey }) {
         <>
           <div>
             <h4>게시글 작성하기</h4>
-            <span>여러분의 고민을 익명 속에서 자유롭게 !</span>
           </div>
-          <input
+          <St.Input
             type="text"
             value={createTitle}
             onChange={(e) => setCreateTitle(e.target.value)}
             onClick={(e) => e.stopPropagation()}
             placeholder="제목"
           />
-          <textarea
+          <St.Input
+            type="text"
             value={createBody}
             onChange={(e) => setCreateBody(e.target.value)}
             onClick={(e) => e.stopPropagation()}
+            placeholder="내용"
+            style={{ height: "70px", marginBottom: "15px" }}
           />
         </>
         <St.Button onClick={onSaveHandler} buttontheme="primary">

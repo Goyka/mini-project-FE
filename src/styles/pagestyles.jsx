@@ -18,6 +18,7 @@ export const Header = styled.header`
   max-width: 1150px;
   position: fixed;
   top: 0;
+  border-bottom: 1.5px solid lightgray;
 `;
 export const Nav = styled.div`
   background-color: transparent;

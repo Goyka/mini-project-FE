@@ -20,7 +20,6 @@ export const Register = ({ closeModal, setMainPageKey }) => {
     const regex = /^[a-zA-Z0-9_]{5,}$/;
     return regex.test(value);
   };
-
   const validatePassword = (value) => {
     const regex =
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
@@ -30,7 +29,6 @@ export const Register = ({ closeModal, setMainPageKey }) => {
     const regex = /\d{4,}/;
     return regex.test(value);
   };
-
   const validateEmail = (value) => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return regex.test(value);
@@ -99,7 +97,7 @@ export const Register = ({ closeModal, setMainPageKey }) => {
               handleChange={setPassword}
               handleKeyUp={validatePassword}
               errorMessage={
-                "비밀번호는 8자리 이상이며, 영어 대문자 1개, 특수문자 1개가 포함되어야합니다."
+                "비밀번호는 8자리 이상이며, 영어 대문자 1개, 특수문자 1개가 포함 되어야 합니다."
               }
             />
             <p>비밀번호 재입력</p>

@@ -108,11 +108,12 @@ export const ContentWrap = styled.div`
 
 export const ContentBox = styled.div`
   background-color: transparent;
-  width: 700px;
-  height: 200px;
+  width: 750px;
+  min-height: 250px;
+  height: 100%;
   padding: 20px;
-  border: 2px solid lightgray;
-  border-radius: 17px;
+  border: 1.5px solid lightgray;
+  border-radius: 15px;
   margin: 0 auto 10px auto;
 `;
 

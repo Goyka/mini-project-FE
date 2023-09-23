@@ -14,8 +14,7 @@ export const __getPost = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const res = await axios.get("/api/posts?page=1&size=60");
-      // const len = res.data.data.content[0].commentList;
-      console.log(res.data.data.content);
+      // console.log(res.data.data.content);
       return res.data.data.content;
     } catch (error) {
       console.error(error);

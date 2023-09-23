@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import axios from "../api/instance";
-import { useDispatch } from "react-redux";
 
 import { setToken } from "@/util/token";
 import { Register } from "./Register";

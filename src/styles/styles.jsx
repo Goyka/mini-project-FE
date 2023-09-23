@@ -108,6 +108,7 @@ export const ContentWrap = styled.div`
 
 export const ContentBox = styled.div`
   background-color: transparent;
+  display: flex;
   width: 750px;
   min-height: 250px;
   height: 100%;

@@ -13,7 +13,10 @@ export const __getPost = createAsyncThunk(
   "posts/getPost",
   async (payload, thunkAPI) => {
     try {
-      const res = await axios.get("/api/posts?page=1&size=60");
+      const res = await axios.get(
+        "/api/posts?page=1&size=60"
+        // { withCredentials: true, }
+      );
       // console.log(res.data.data.content);
       return res.data.data.content;
     } catch (error) {

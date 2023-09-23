@@ -29,7 +29,17 @@ class MyDocument extends Document {
     }
   }
 
+  loadWindowProperty = (locale) => (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `window.__localeId__ = "${locale}"`,
+      }}
+    ></script>
+  );
+
   render() {
+    const { loadWindowProperty } = this;
+    const { locale } = this.props; // 'ko' or 'en'
     return (
       <Html>
         <Head>

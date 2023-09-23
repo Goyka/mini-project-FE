@@ -67,10 +67,6 @@ export default function Home() {
     };
   }, [currentPage, isLoadingMore]);
 
-  useEffect(() => {
-    console.log("리렌더링 탐지 >>>", mainPageKey);
-  }, [mainPageKey]);
-
   const openCreateModal = () => {
     setIsCreateOpen(true);
   };

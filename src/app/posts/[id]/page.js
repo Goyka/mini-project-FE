@@ -32,9 +32,12 @@ export default function Read() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isTokenIn, setIsTokenIn] = useState(false);
-  const [renderer, setRenderer] = useState(false);
   const [userNickname, setUserNickname] = useState("");
   const token = getToken();
+
+  useEffect(() => {
+    router.prefetch(`/posts/${params.id}`);
+  }, [router]);
 
   useEffect(() => {
     dispatch(__getPostDetail(params.id));
@@ -56,13 +59,11 @@ export default function Read() {
   };
 
   const logoutHandler = () => {
-    const removeToken = () => {
-      localStorage.removeItem("Authorization");
-    };
-    removeToken();
+    localStorage.removeItem("Authorization");
     setIsTokenIn(!isTokenIn);
     router.push("/");
   };
+
   const deletePost = async (e) => {
     try {
       const res = await axios.delete(`/api/posts/${params.id}`, {
@@ -121,6 +122,8 @@ export default function Read() {
                   nickname={posts.nickname}
                   title={posts.title}
                   content={posts.content}
+                  commentsList={posts.commentsList}
+                  userNickname={userNickname}
                 />
                 <div>
                   {userNickname === posts.nickname ? (

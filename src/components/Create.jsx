@@ -32,8 +32,8 @@ export default function Create({ closeModal }) {
       if (res.status === 200) {
         setCreateTitle(res.data.data.content.title);
         setCreateBody(res.data.data.content.content);
-        closeModal();
         window.location.reload();
+        closeModal();
       }
     } catch (error) {
       console.error(error);

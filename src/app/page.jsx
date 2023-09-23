@@ -52,6 +52,10 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    router.prefetch("/");
+  }, [router]);
+
+  useEffect(() => {
     dispatch(__getPost({ page: currentPage, perPage: postsPerPage }));
   }, []);
 
@@ -63,7 +67,9 @@ export default function Home() {
     };
   }, [currentPage, isLoadingMore]);
 
-  console.log("리렌더링 탐지 >>>", mainPageKey);
+  useEffect(() => {
+    console.log("리렌더링 탐지 >>>", mainPageKey);
+  }, [mainPageKey]);
 
   const openCreateModal = () => {
     setIsCreateOpen(true);
@@ -106,6 +112,12 @@ export default function Home() {
     }
   };
 
+  const trendingPosts = [...Object.values(posts)]
+    .sort((a, b) => {
+      return b.commentsList.length - a.commentsList.length;
+    })
+    .slice(0, 4);
+
   return (
     <Pg.Container>
       <Pg.Header>
@@ -135,7 +147,6 @@ export default function Home() {
               </St.Button>
             ) : (
               <>
-                {" "}
                 <St.Button
                   onClick={openCreateModal}
                   style={{ marginTop: "10px" }}
@@ -158,8 +169,39 @@ export default function Home() {
       </Pg.Header>
       <Pg.BodyWrap>
         <Pg.RePostWrap>
-          <div>
-            <h3>뉴스피드</h3>
+          <div
+            style={{
+              fontSize: "20px",
+            }}
+          >
+            <h3> 💫 Trending</h3>
+          </div>
+          <Pg.RecentPost>
+            {isLoading ? (
+              <Loading />
+            ) : error ? (
+              <div>Error: {error.message}</div>
+            ) : (
+              trendingPosts.map((data) => (
+                <Kanban
+                  isTokenIn={isTokenIn}
+                  key={data.id}
+                  id={data.id}
+                  nickname={data.nickname}
+                  title={data.title}
+                  commentLength={data.commentsList.length}
+                />
+              ))
+            )}
+          </Pg.RecentPost>
+        </Pg.RePostWrap>
+        <Pg.RePostWrap>
+          <div
+            style={{
+              fontSize: "20px",
+            }}
+          >
+            <h3> ☕︎ Newsfeed</h3>
           </div>
           <Pg.RecentPost>
             {isLoading ? (

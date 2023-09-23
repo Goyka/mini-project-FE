@@ -1,12 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import * as St from "../styles/styles";
 
 export function Kanban({ id, title, nickname, isTokenIn, commentLength }) {
   const router = useRouter();
   const postId = id;
+
+  useEffect(() => {
+    router.prefetch(`/posts/${postId}`);
+  }, [router]);
+
   return (
     <>
       <St.Box
@@ -45,9 +50,10 @@ export function Kanban({ id, title, nickname, isTokenIn, commentLength }) {
             textAlign: "center",
             boxSizing: "border-box",
             padding: "1px",
+            fontWeight: "600",
           }}
         >
-          comment ☻ {commentLength}
+          Comments ⚑ {commentLength}
         </div>
       </St.Box>
     </>

@@ -6,6 +6,5 @@ export default function isUserFit() {
   const jwtData = JSON.parse(decodedPayload);
   const nickname = jwtData.nickname;
 
-  console.log("nickname:", nickname);
   return nickname;
 }

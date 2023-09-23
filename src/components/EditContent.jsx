@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "@/api/instance";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { getToken } from "@/util/token";
 import * as St from "@/styles/styles";
 
@@ -10,9 +10,10 @@ import * as St from "@/styles/styles";
  * @includes : Modal component for the read page.
  */
 
-const EditContent = ({ id, closeModal, setMainPageKey }) => {
+const EditContent = ({ closeModal }) => {
   const params = useParams();
   const token = getToken();
+  const router = useRouter();
   const [createTitle, setCreateTitle] = useState("");
   const [createBody, setCreateBody] = useState("");
 
@@ -49,8 +50,7 @@ const EditContent = ({ id, closeModal, setMainPageKey }) => {
       if (res.status === 200) {
         e.stopPropagation();
         closeModal();
-        console.log(res);
-        // window.location.reload();
+        router.push(`/`);
       }
     } catch (error) {
       console.error(error);

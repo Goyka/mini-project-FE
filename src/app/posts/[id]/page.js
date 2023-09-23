@@ -32,8 +32,7 @@ export default function Read() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isTokenIn, setIsTokenIn] = useState(false);
-  const [mainPageKey, setMainPageKey] = useState(0);
-
+  const [renderer, setRenderer] = useState(false);
   const [userNickname, setUserNickname] = useState("");
   const token = getToken();
 
@@ -146,20 +145,14 @@ export default function Read() {
       {isEditOpen && (
         <St.ModalWrap onClick={isEditOpen ? closeEditModal : undefined}>
           <St.Modal>
-            <EditContent
-              closeModal={closeEditModal}
-              setMainPageKey={setMainPageKey}
-            />
+            <EditContent closeModal={closeEditModal} />
           </St.Modal>
         </St.ModalWrap>
       )}
       {isCreateOpen && (
         <St.ModalWrap onClick={isCreateOpen ? closeCreateModal : undefined}>
           <St.Modal>
-            <Create
-              closeModal={closeCreateModal}
-              setMainPageKey={setMainPageKey}
-            />
+            <Create closeModal={closeCreateModal} />
           </St.Modal>
         </St.ModalWrap>
       )}

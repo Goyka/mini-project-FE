@@ -13,7 +13,7 @@ import Create from "@/components/Create";
 import * as St from "@/styles/styles";
 import * as Pg from "@/styles/pagestyles";
 import Image from "next/image";
-import kanlogo from "/public/kanlogo.png";
+import kanlogo from "/public/kanlogo.webp";
 
 import isUserFit from "@/util/isUserFit";
 import { getToken } from "@/util/token";

@@ -20,7 +20,8 @@ const ReadContent = ({
   userNickname,
 }) => {
   const [comment, setComment] = useState("");
-  const [editedComment, setEditedComment] = useState(content);
+
+  const [commentBody, setCommentBody] = useState();
   // 수정하려는 댓글의 ID 값 저장을 위한 State 추기
   const [commentId, setCommentId] = useState();
   const [isEditing, setIsEditing] = useState(false);
@@ -34,17 +35,10 @@ const ReadContent = ({
     setComment(e.target.value);
   };
 
-  const handleEditedCommentChange = (e) => {
-    setEditedComment(e.target.value);
-  };
-
-  const toggleIsEditing = () => {
-    setIsEditing(!isEditing);
-  };
-
-  const toggleAndSetCommentId = (commentId) => {
+  const toggleAndSetCommentId = (commentId, commentBody) => {
     setIsEditing(!isEditing);
     setCommentId(commentId);
+    setCommentBody(commentBody);
   };
 
   const postComment = async () => {
@@ -54,7 +48,7 @@ const ReadContent = ({
         { comment },
         { headers: { Authorization: `${token}` } }
       );
-      if (res.status === 200) {
+      if (comment !== "" && res.status === 200) {
         setComment(res.data.data.comment);
         setComment("");
         window.location.reload();
@@ -84,7 +78,7 @@ const ReadContent = ({
     try {
       const res = await axios.put(
         `/api/posts/${id}/comments/${commentId}`,
-        { comment: editedComment },
+        { comment: commentBody },
         {
           headers: {
             "Content-Type": "application/json",
@@ -95,7 +89,7 @@ const ReadContent = ({
       );
       if (res.status === 200) {
         setIsEditing(false);
-        console.log(res);
+        window.location.reload();
       }
     } catch (error) {
       console.error(error);
@@ -163,7 +157,6 @@ const ReadContent = ({
             display: "flex",
           }}
         >
-          {" "}
           {!isEditing ? (
             <>
               <St.Input
@@ -191,9 +184,9 @@ const ReadContent = ({
               <St.Input
                 style={{ width: "290px", height: "30px" }}
                 name="comments"
-                value={editedComment}
+                value={commentBody}
                 type="text"
-                onChange={handleEditedCommentChange}
+                onChange={(e) => setCommentBody(e.target.value)}
                 placeholder="수정할 내용"
               />
               <St.Button
@@ -236,7 +229,9 @@ const ReadContent = ({
                   </St.Button>
                   <St.Button
                     buttontheme="secondary"
-                    onClick={() => toggleAndSetCommentId(comment.id)}
+                    onClick={() =>
+                      toggleAndSetCommentId(comment.id, comment.comment)
+                    }
                     style={{
                       width: "50px",
                       height: "20px",

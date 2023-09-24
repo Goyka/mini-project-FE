@@ -7,7 +7,7 @@ import { __getPost } from "../Redux/postSlice";
 // Styles
 import * as Pg from "@/styles/pagestyles";
 import * as St from "../styles/styles";
-import kanlogo from "/public/kanlogo.webp";
+import kanlogo from "../img/kanlogo.webp";
 // Components
 import { getToken } from "@/util/token";
 import { Kanban } from "@/components/Kanban";

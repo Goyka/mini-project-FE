@@ -9,7 +9,7 @@ import ValidInput from "./ValidInput";
  * @includes : Create User info.
  */
 
-export const Register = ({ closeModal, setMainPageKey }) => {
+export const Register = ({ closeModal }) => {
   const [username, setUsername] = useState("");
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");

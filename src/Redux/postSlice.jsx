@@ -14,7 +14,7 @@ export const __getPost = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const res = await axios.get(
-        "/api/posts?page=1&size=60"
+        `/api/posts?page=${payload.page}&${payload.size}`
         // { withCredentials: true, }
       );
       // console.log(res.data.data.content);
@@ -27,9 +27,12 @@ export const __getPost = createAsyncThunk(
 );
 
 const initialState = {
-  posts: {},
+  posts: [],
   isLoading: false,
   error: null,
+  currentPage: 1,
+  postsPerPage: 4,
+  moreData: true,
 };
 
 const postSlice = createSlice({
@@ -43,7 +46,8 @@ const postSlice = createSlice({
       })
       .addCase(__getPost.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.posts = { ...state.posts, ...action.payload };
+        state.posts = [...state.posts, ...action.payload];
+        state.currentPage += 1;
       })
       .addCase(__getPost.rejected, (state, action) => {
         state.isLoading = false;

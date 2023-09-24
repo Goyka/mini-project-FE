@@ -1,20 +1,21 @@
 "use client";
 import { useState } from "react";
 import axios from "../api/instance";
-
 import { setToken } from "@/util/token";
 import { Register } from "./Register";
 import * as St from "../styles/styles";
+import { useRouter } from "next/navigation";
 
 /**
  * @author : Won Heo, Goya Gim
  * @includes : Makes login function based on server data.
  */
 
-export default function Login({ closeModal, setMainPageKey }) {
+export default function Login({ closeModal }) {
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const openRegisterModal = (e) => {
     e.stopPropagation();
@@ -34,8 +35,8 @@ export default function Login({ closeModal, setMainPageKey }) {
 
       if (res.status === 200) {
         setToken(res.headers.authorization);
-        closeModal();
         window.location.reload();
+        closeModal();
       }
     } catch (error) {
       console.error(error);
@@ -72,11 +73,7 @@ export default function Login({ closeModal, setMainPageKey }) {
             <St.Button onClick={onLoginHandler} buttontheme="primary">
               로그인
             </St.Button>
-            <St.Button
-              onClick={openRegisterModal}
-              setmainpagekey={setMainPageKey}
-              buttontheme="secondary"
-            >
+            <St.Button onClick={openRegisterModal} buttontheme="secondary">
               회원가입
             </St.Button>
           </div>

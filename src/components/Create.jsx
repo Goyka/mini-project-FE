@@ -32,7 +32,6 @@ export default function Create({ closeModal }) {
       if (res.status === 200) {
         setCreateTitle(res.data.data.content.title);
         setCreateBody(res.data.data.content.content);
-        window.location.reload();
         closeModal();
       }
     } catch (error) {
@@ -48,6 +47,7 @@ export default function Create({ closeModal }) {
           </div>
           <St.Input
             type="text"
+            name="title"
             value={createTitle}
             onChange={(e) => setCreateTitle(e.target.value)}
             onClick={(e) => e.stopPropagation()}
@@ -55,6 +55,7 @@ export default function Create({ closeModal }) {
           />
           <St.Input
             type="text"
+            name="body"
             value={createBody}
             onChange={(e) => setCreateBody(e.target.value)}
             onClick={(e) => e.stopPropagation()}

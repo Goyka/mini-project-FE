@@ -64,14 +64,16 @@ const EditContent = ({ closeModal }) => {
           <div>
             <h4>게시글 수정하기</h4>
           </div>
-          <input
+          <St.Input
             type="text"
+            name="title"
             value={createTitle}
             onChange={(e) => setCreateTitle(e.target.value)}
             onClick={(e) => e.stopPropagation()}
             placeholder="제목"
           />
           <textarea
+            name="body"
             value={createBody}
             onChange={(e) => setCreateBody(e.target.value)}
             onClick={(e) => e.stopPropagation()}

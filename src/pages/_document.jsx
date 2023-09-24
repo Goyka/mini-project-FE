@@ -38,8 +38,6 @@ class MyDocument extends Document {
   );
 
   render() {
-    const { loadWindowProperty } = this;
-    const { locale } = this.props; // 'ko' or 'en'
     return (
       <Html>
         <Head>

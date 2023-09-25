@@ -67,6 +67,7 @@ export const ModalWrap = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
 export const Modal = styled.div`
   display: flex;
   flex-direction: column;
@@ -137,5 +138,6 @@ export const Input = styled.input`
 export const Col = styled.div`
   display: flex;
   flex-direction: column;
-  margin: ${(props) => props && props.margin};
+  align-items: center;
+  text-align: center;
 `;

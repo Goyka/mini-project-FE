@@ -255,10 +255,10 @@ export default function Home() {
         </St.ModalWrap>
       )}
       {isLoginOpen && (
-        <St.ModalWrap onClick={isLoginOpen ? closeLoginModal : undefined}>
+        <St.ModalWrap>
           <St.Modal>
             <Suspense fallback={<Loading />}>
-              <LazyLogin closeModal={closeCreateModal} />
+              <LazyLogin closeModal={closeLoginModal} />
             </Suspense>
           </St.Modal>
         </St.ModalWrap>

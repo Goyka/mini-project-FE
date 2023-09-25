@@ -47,6 +47,18 @@ export default function Login({ closeModal }) {
     <St.ModalWrap>
       <St.Modal>
         <>
+          <St.Button
+            onClick={closeModal}
+            style={{
+              backgroundColor: "white",
+              position: "relative",
+              top: "-50px",
+              right: "-180px",
+              width: "40px",
+            }}
+          >
+            ✖︎
+          </St.Button>
           <St.Input
             type="text"
             name="id"
@@ -80,9 +92,9 @@ export default function Login({ closeModal }) {
         </>
       </St.Modal>
       {isRegisterOpen && (
-        <St.ModalWrap onClick={isRegisterOpen ? closeRegisterModal : undefined}>
+        <St.ModalWrap>
           <St.Modal>
-            <Register closeModal={closeModal} />
+            <Register closeModal={closeRegisterModal} />
           </St.Modal>
         </St.ModalWrap>
       )}

@@ -72,15 +72,20 @@ const EditContent = ({ closeModal }) => {
             onClick={(e) => e.stopPropagation()}
             placeholder="제목"
           />
-          <textarea
+          <St.Input
             name="body"
             value={createBody}
+            style={{ height: "90px" }}
             onChange={(e) => setCreateBody(e.target.value)}
             onClick={(e) => e.stopPropagation()}
             placeholder="내용"
           />
         </>
-        <St.Button onClick={EditHandler} buttontheme="primary">
+        <St.Button
+          onClick={EditHandler}
+          style={{ marginTop: "10px" }}
+          buttontheme="primary"
+        >
           수정하기
         </St.Button>
       </St.Modal>

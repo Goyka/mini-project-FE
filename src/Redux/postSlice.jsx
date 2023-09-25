@@ -21,7 +21,7 @@ export const __getPost = createAsyncThunk(
       return res.data.data.content;
     } catch (error) {
       console.error(error);
-      throw error;
+      alert(error.response.data.message);
     }
   }
 );

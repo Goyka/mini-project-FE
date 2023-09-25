@@ -15,6 +15,9 @@ export const Register = ({ closeModal }) => {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [email, setEmail] = useState("");
+  const [isCodeSent, setIsCodeSent] = useState(false);
+  const [valNumber, setValNumber] = useState("");
+  const [isVal, setIsVal] = useState(false);
 
   const validateUserId = (value) => {
     const regex = /^[a-zA-Z0-9_]{5,}$/;
@@ -26,21 +29,68 @@ export const Register = ({ closeModal }) => {
     return regex.test(value);
   };
   const validateNickname = (value) => {
-    const regex = /\d{4,}/;
+    const regex = /^[가-힣]{4,}$/;
     return regex.test(value);
   };
   const validateEmail = (value) => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return regex.test(value);
   };
+  const validateCode = (value) => {
+    const regex = /^.{1,300}$/;
+    return regex.test(value);
+  };
 
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
+  const onVerifiedEmail = async () => {
+    // response로 받은 인증번호가 생성되었던 인증번호와 다르면 회원가입 통신 X
+    try {
+      const response = await axios.post(
+        "/api/users/emailsend",
+        {
+          email,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
-    if (password !== passwordConfirm) {
-      alert("비밀번호와 비밀번호 확인이 서로 다릅니다.");
-      return;
+      // input으로 사용자에게 인증번호를 입력 받아 비교해 분기해야 함
+      if (response.status === 200) {
+        console.log("이메일 인증->>", response.data);
+        setIsCodeSent(true);
+      }
+    } catch (error) {
+      console.error(error);
     }
+  };
+
+  const onVerifiedCode = async () => {
+    try {
+      const response = await axios.post(
+        "/api/users/emailVerification",
+        {
+          email,
+          authCode: valNumber,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (response.status === 200) {
+        console.log(response.data.data);
+        if (response.data.data.verified === true) {
+          setIsVal(true);
+          setIsCodeSent(false);
+        }
+      } else {
+        alert("인증번호가 맞지 않습니다.");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onSubmitHandler = async () => {
     try {
       const response = await axios.post(
         "/api/users/signup",
@@ -50,10 +100,12 @@ export const Register = ({ closeModal }) => {
           password,
           email,
         },
-        { headers: { "Content-Type": "application/json" } }
+        {
+          headers: { "Content-Type": "application/json" },
+        }
       );
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         closeModal();
       }
     } catch (error) {
@@ -62,33 +114,42 @@ export const Register = ({ closeModal }) => {
   };
 
   return (
-    <St.ModalWrap>
-      <St.Modal style={{ height: "600px" }}>
-        <>
-          <St.Col>
-            <p>아이디</p>
+    <St.Modal
+      style={{ width: "700px", height: "300px", paddingBottom: "40px" }}
+    >
+      <>
+        <St.Button
+          onClick={closeModal}
+          style={{
+            backgroundColor: "white",
+            position: "relative",
+            top: "-3px",
+            right: "-333px",
+            width: "40px",
+          }}
+        >
+          ✖︎
+        </St.Button>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "48%",
+          }}
+        >
+          <St.Col
+            style={{ width: "48%", marginRight: "20px", marginLeft: "-20px" }}
+          >
+            <div>아이디</div>
             <ValidInput
               type="text"
               name="id"
               value={username}
               handleChange={setUsername}
               handleKeyUp={validateUserId}
-              errorMessage={
-                "아이디는 5자리 이상이며 영문과 숫자, 특수문자 (@$!%*#?& )가 포함됩니다."
-              }
+              errorMessage={"아이디는 5자리 이상이며 영문과 숫자가 포함됩니다."}
             />
-            <p>닉네임</p>
-            <ValidInput
-              type="text"
-              name="nickname"
-              value={nickname}
-              handleChange={setNickname}
-              handleKeyUp={validateNickname}
-              errorMessage={
-                "닉네임은 4자리 이상이며, 숫자만 사용할 수 있습니다."
-              }
-            />
-            <p>비밀번호</p>
+            <div>비밀번호</div>
             <ValidInput
               type="password"
               name="password"
@@ -99,7 +160,7 @@ export const Register = ({ closeModal }) => {
                 "비밀번호는 8자리 이상이며, 영어 대문자 1개, 특수문자 1개가 포함 되어야 합니다."
               }
             />
-            <p>비밀번호 재입력</p>
+            <div>비밀번호 재입력</div>
             <St.Input
               onChange={(e) => setPasswordConfirm(e.target.value)}
               name="passwordConfirm"
@@ -108,7 +169,20 @@ export const Register = ({ closeModal }) => {
             {password === passwordConfirm || (
               <St.ErrorMessage>비밀번호가 동일하지 않습니다</St.ErrorMessage>
             )}
-            <p>이메일 주소</p>
+          </St.Col>
+          <St.Col style={{ width: "48%", marginLeft: "40px" }}>
+            <div>닉네임</div>
+            <ValidInput
+              type="text"
+              name="nickname"
+              value={nickname}
+              handleChange={setNickname}
+              handleKeyUp={validateNickname}
+              errorMessage={
+                "닉네임은 4자리 이상이며, 한글 닉네임만 사용 가능합니다."
+              }
+            />
+            <div>이메일 주소</div>
             <ValidInput
               type="text"
               name="email"
@@ -119,12 +193,54 @@ export const Register = ({ closeModal }) => {
                 "example@gmail.com <- 아이디와 도메인을 꼼꼼히 입력해주세요."
               }
             />
+            {!isCodeSent ? (
+              <></>
+            ) : (
+              <>
+                <div>이메일 인증번호 입력</div>
+                <ValidInput
+                  type="text"
+                  name="valNumber"
+                  value={valNumber}
+                  handleChange={setValNumber}
+                  handleKeyUp={validateCode}
+                  errorMessage={
+                    "입력한 이메일 주소로 발송된 인증번호를 5분 이내로 입력해주세요."
+                  }
+                />
+              </>
+            )}
           </St.Col>
+        </div>
+      </>
+      {!isVal ? (
+        <>
+          {!isCodeSent && (
+            <St.Button
+              onClick={onVerifiedEmail}
+              buttontheme="secondary"
+              style={{ border: "2px solid red" }}
+            >
+              이메일 인증
+            </St.Button>
+          )}
+          {isCodeSent && (
+            <St.Button
+              onClick={onVerifiedCode}
+              buttontheme="secondary"
+              style={{ border: "2px solid green" }}
+            >
+              인증번호
+            </St.Button>
+          )}
         </>
-        <St.Button onClick={onSubmitHandler} buttontheme="secondary">
-          회원가입
-        </St.Button>
-      </St.Modal>
-    </St.ModalWrap>
+      ) : (
+        <>
+          <St.Button onClick={onSubmitHandler} buttontheme="primary">
+            회원가입
+          </St.Button>
+        </>
+      )}
+    </St.Modal>
   );
 };

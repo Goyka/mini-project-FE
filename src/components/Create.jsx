@@ -33,6 +33,7 @@ export default function Create({ closeModal }) {
         setCreateTitle(res.data.data.content.title);
         setCreateBody(res.data.data.content.content);
         closeModal();
+        window.location.reload();
       }
     } catch (error) {
       console.error(error);

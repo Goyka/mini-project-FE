@@ -29,7 +29,7 @@ export const Register = ({ closeModal }) => {
     return regex.test(value);
   };
   const validateNickname = (value) => {
-    const regex = /^[가-힣]{4,}$/;
+    const regex = /^[가-힣]{3,}$/;
     return regex.test(value);
   };
   const validateEmail = (value) => {
@@ -179,7 +179,7 @@ export const Register = ({ closeModal }) => {
               handleChange={setNickname}
               handleKeyUp={validateNickname}
               errorMessage={
-                "닉네임은 4자리 이상이며, 한글 닉네임만 사용 가능합니다."
+                "닉네임은 3자리 이상이며, 한글 닉네임만 사용 가능합니다."
               }
             />
             <div>이메일 주소</div>

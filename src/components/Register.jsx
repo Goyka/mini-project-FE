@@ -61,6 +61,7 @@ export const Register = ({ closeModal }) => {
       }
     } catch (error) {
       console.error(error);
+      alert(error.response.data.message);
     }
   };
 
@@ -82,11 +83,10 @@ export const Register = ({ closeModal }) => {
           setIsVal(true);
           setIsCodeSent(false);
         }
-      } else {
-        alert("인증번호가 맞지 않습니다.");
       }
     } catch (error) {
       console.error(error);
+      alert(error.response.data.message);
     }
   };
 
@@ -110,6 +110,7 @@ export const Register = ({ closeModal }) => {
       }
     } catch (error) {
       console.error(error);
+      alert(error.response.data.message);
     }
   };
 

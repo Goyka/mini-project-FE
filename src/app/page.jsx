@@ -1,13 +1,12 @@
 "use client";
 // React & Redux
-import React, { useEffect, useState, lazy, Suspense } from "react";
+import React, { useEffect, useState, lazy, Suspense, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useInView } from "react-intersection-observer";
 import { __getPost } from "../Redux/postSlice";
 // Styles
 import * as Pg from "@/styles/pagestyles";
 import * as St from "../styles/styles";
-import kanlogo from "../img/kanlogo.webp";
+import shadeLogo from "../img/shadeLogo.webp";
 // Components
 import { getToken } from "@/util/token";
 import { Kanban } from "@/components/Kanban";
@@ -25,6 +24,7 @@ import { useRouter } from "next/navigation";
 export default function Home() {
   const dispatch = useDispatch();
   const router = useRouter();
+  const pageEnd = useRef();
   // React lazy - Suspense로 최적화
   const LazyCreate = lazy(() => import("@/components/Create"));
   const LazyLogin = lazy(() => import("@/components/Login"));
@@ -34,14 +34,12 @@ export default function Home() {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isTokenIn, setIsTokenIn] = useState(false);
   // For infinity Scroll
-  const [ref, inView] = useInView({
-    threshold: 0.5,
-  });
   const [prevScrollY, setPrevScrollY] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(20);
   const [moreData, setMoreData] = useState(true);
   const [cachedData, setCachedData] = useState([]);
+  const [trendingPosts, setTrendingPosts] = useState([]);
 
   useEffect(() => {
     const token = getToken();
@@ -54,58 +52,55 @@ export default function Home() {
 
   useEffect(() => {
     fetchData(currentPage);
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     router.prefetch("/");
   }, [router]);
 
+  useEffect(() => {
+    if (isLoadingMore) {
+      //로딩되었을 때만 실행
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            loadMore();
+          }
+        },
+        { threshold: 0.8 }
+      );
+      //옵져버 탐색 시작
+      observer.observe(pageEnd.current);
+    }
+  }, [isLoadingMore]);
+
   // 그냥 __getPost로 dispatch 받는게 아닌, 캐시 기능을 이용한 최적화
   const fetchData = async (page) => {
     try {
-      setIsLoadingMore(true);
       const response = await dispatch(
         __getPost({ page, perPage: postsPerPage })
       );
       const newData = response.payload;
 
-      setCachedData((prevData) => [
-        ...prevData.slice(0, (page - 1) * postsPerPage),
-        ...newData,
-      ]);
-      setCurrentPage(page);
-      setIsLoadingMore(false);
+      setCachedData((prevData) => [...prevData, ...newData]);
+      setIsLoadingMore(true);
+
+      if (page === 1) {
+        const trending = newData
+          .slice()
+          .sort((a, b) => b.commentsList.length - a.commentsList.length)
+          .slice(0, 4);
+        setTrendingPosts(trending);
+        setIsLoadingMore(false);
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
       setIsLoadingMore(false);
     }
   };
-
-  useEffect(() => {
-    const scrollHandler = () => {
-      const currentScrollY = window.scrollY;
-      if (
-        currentScrollY + window.innerHeight >=
-          document.body.offsetHeight - 200 &&
-        currentScrollY > prevScrollY &&
-        !isLoadingMore &&
-        moreData
-      ) {
-        const nextPage = currentPage + 1;
-        if (nextPage * postsPerPage <= cachedData.length) {
-          setCurrentPage(nextPage);
-        } else {
-          fetchData(nextPage);
-        }
-      }
-      setPrevScrollY(currentScrollY);
-    };
-    window.addEventListener("scroll", scrollHandler);
-
-    return () => {
-      window.removeEventListener("scroll", scrollHandler);
-    };
-  }, [currentPage, isLoadingMore, cachedData, moreData, prevScrollY]);
+  const loadMore = () => {
+    setCurrentPage((prev) => prev + 1);
+  };
 
   const openCreateModal = () => {
     setIsCreateOpen(true);
@@ -128,18 +123,12 @@ export default function Home() {
     setIsTokenIn(!isTokenIn);
   };
 
-  const trendingPosts = [...Object.values(posts)]
-    .sort((a, b) => {
-      return b.commentsList.length - a.commentsList.length;
-    })
-    .slice(0, 4);
-
   return (
     <Pg.Container>
       <Pg.Header>
         <Pg.Nav>
           <Image
-            src={kanlogo}
+            src={shadeLogo}
             priority
             alt="logo"
             onClick={() => {
@@ -193,10 +182,8 @@ export default function Home() {
             <h3> 💫 Trending</h3>
           </div>
           <Pg.RecentPost>
-            {isLoading ? (
+            {trendingPosts.length === 0 ? (
               <Loading />
-            ) : error ? (
-              <div>Error: {error.message}</div>
             ) : (
               trendingPosts.map((data, index) => (
                 <Kanban
@@ -243,7 +230,7 @@ export default function Home() {
         </Pg.RePostWrap>
 
         <Pg.Footer>© Copyright Team 6. All rights reserved</Pg.Footer>
-        <div ref={ref} />
+        <div ref={pageEnd} />
       </Pg.BodyWrap>
       {isCreateOpen && (
         <St.ModalWrap onClick={isCreateOpen ? closeCreateModal : undefined}>

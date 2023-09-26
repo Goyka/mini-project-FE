@@ -41,8 +41,9 @@ export const StyledLink = styled(Link)`
 export const Box = styled.div`
   background-color: #ffffff;
   flex: 1;
-  min-width: calc(20% - 12px);
+  min-width: calc(25% - 12px);
   max-width: calc(25% - 12px);
+  min-height: calc(25% - 12px);
   height: 100px;
   padding: 20px;
   border: 1.5px solid lightgray;

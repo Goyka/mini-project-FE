@@ -15,7 +15,7 @@ export const __getPost = createAsyncThunk(
     const pageNum = payload.page ? payload.page : 1;
     try {
       const res = await axios.get(`/api/posts?page=${pageNum}&size=20`);
-      console.log(res);
+
       return res.data.data.content;
     } catch (error) {
       console.error(error);

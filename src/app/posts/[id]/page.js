@@ -13,7 +13,7 @@ import Create from "@/components/Create";
 import * as St from "@/styles/styles";
 import * as Pg from "@/styles/pagestyles";
 import Image from "next/image";
-import kanlogo from "@/img/kanlogo.webp";
+import shadeLogo from "@/img/shadeLogo.webp";
 
 import isUserFit from "@/util/isUserFit";
 import { getToken } from "@/util/token";
@@ -88,7 +88,7 @@ export default function Read() {
       <Pg.Header>
         <Pg.Nav>
           <Image
-            src={kanlogo}
+            src={shadeLogo}
             priority
             alt="Title Logo"
             width={230}

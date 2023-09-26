@@ -89,7 +89,7 @@ export default function Home() {
         const trending = newData
           .slice()
           .sort((a, b) => b.commentsList.length - a.commentsList.length)
-          .slice(0, 4);
+          .slice(0, 6);
         setTrendingPosts(trending);
         setIsLoadingMore(!isLoadingMore);
       }

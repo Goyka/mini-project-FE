@@ -12,12 +12,10 @@ import axios from "../api/instance";
 export const __getPost = createAsyncThunk(
   "posts/getPost",
   async (payload, thunkAPI) => {
+    const pageNum = payload.page ? payload.page : 1;
     try {
-      const res = await axios.get(
-        `/api/posts?page=${payload.page}&${payload.size}`
-        // { withCredentials: true, }
-      );
-      // console.log(res.data.data.content);
+      const res = await axios.get(`/api/posts?page=${pageNum}&size=20`);
+      console.log(res);
       return res.data.data.content;
     } catch (error) {
       console.error(error);
@@ -31,8 +29,7 @@ const initialState = {
   isLoading: false,
   error: null,
   currentPage: 1,
-  postsPerPage: 4,
-  moreData: true,
+  postsPerPage: 20,
 };
 
 const postSlice = createSlice({

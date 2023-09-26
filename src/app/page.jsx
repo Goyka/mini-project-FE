@@ -34,15 +34,15 @@ export default function Home() {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isTokenIn, setIsTokenIn] = useState(false);
   // For infinity Scroll
-  const [prevScrollY, setPrevScrollY] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(20);
-  const [moreData, setMoreData] = useState(true);
   const [cachedData, setCachedData] = useState([]);
   const [trendingPosts, setTrendingPosts] = useState([]);
+  const [isInitialLoad, setIsInitialLoad] = useState(false);
 
   useEffect(() => {
     const token = getToken();
+
     if (!token) {
       setIsTokenIn(false);
     } else {
@@ -52,6 +52,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchData(currentPage);
+    setIsInitialLoad(true);
   }, [currentPage]);
 
   useEffect(() => {
@@ -60,16 +61,15 @@ export default function Home() {
 
   useEffect(() => {
     if (isLoadingMore) {
-      //로딩되었을 때만 실행
       const observer = new IntersectionObserver(
         (entries) => {
           if (entries[0].isIntersecting) {
             loadMore();
           }
         },
-        { threshold: 0.8 }
+        { threshold: 1 }
       );
-      //옵져버 탐색 시작
+
       observer.observe(pageEnd.current);
     }
   }, [isLoadingMore]);
@@ -83,7 +83,7 @@ export default function Home() {
       const newData = response.payload;
 
       setCachedData((prevData) => [...prevData, ...newData]);
-      setIsLoadingMore(true);
+      setIsLoadingMore(!isLoadingMore);
 
       if (page === 1) {
         const trending = newData
@@ -91,7 +91,7 @@ export default function Home() {
           .sort((a, b) => b.commentsList.length - a.commentsList.length)
           .slice(0, 4);
         setTrendingPosts(trending);
-        setIsLoadingMore(false);
+        setIsLoadingMore(!isLoadingMore);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -182,20 +182,16 @@ export default function Home() {
             <h3> 💫 Trending</h3>
           </div>
           <Pg.RecentPost>
-            {trendingPosts.length === 0 ? (
-              <Loading />
-            ) : (
-              trendingPosts.map((data, index) => (
-                <Kanban
-                  isTokenIn={isTokenIn}
-                  key={`${data.id}-${index}`}
-                  id={data.id}
-                  nickname={data.nickname}
-                  title={data.title}
-                  commentLength={data.commentsList.length}
-                />
-              ))
-            )}
+            {trendingPosts.map((data, index) => (
+              <Kanban
+                isTokenIn={isTokenIn}
+                key={`${data.id}-${index}`}
+                id={data.id}
+                nickname={data.nickname}
+                title={data.title}
+                commentLength={data.commentsList.length}
+              />
+            ))}
           </Pg.RecentPost>
         </Pg.RePostWrap>
         <Pg.RePostWrap>
@@ -212,25 +208,21 @@ export default function Home() {
             ) : error ? (
               <div>Error: {error.message}</div>
             ) : (
-              [...Object.values(posts)]
-                .slice(0, currentPage * postsPerPage)
-                .map((data, index) => (
-                  <Kanban
-                    isTokenIn={isTokenIn}
-                    key={`${data.id}-${index}`}
-                    id={data.id}
-                    nickname={data.nickname}
-                    title={data.title}
-                    commentLength={data.commentsList.length}
-                  />
-                ))
+              [...Object.values(posts)].map((data, index) => (
+                <Kanban
+                  isTokenIn={isTokenIn}
+                  key={`${data.id}-${index}`}
+                  id={data.id}
+                  nickname={data.nickname}
+                  title={data.title}
+                  commentLength={data.commentsList.length}
+                />
+              ))
             )}
           </Pg.RecentPost>
-          {isLoadingMore && <Loading />}
         </Pg.RePostWrap>
-
-        <Pg.Footer>© Copyright Team 6. All rights reserved</Pg.Footer>
         <div ref={pageEnd} />
+        <Pg.Footer>© SHADE! Copyright Team 6. All rights reserved</Pg.Footer>
       </Pg.BodyWrap>
       {isCreateOpen && (
         <St.ModalWrap onClick={isCreateOpen ? closeCreateModal : undefined}>

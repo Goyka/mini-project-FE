@@ -25,7 +25,7 @@ https://mini-project-b8xs3zwbg-goyka.vercel.app/
 
 **라이브러리**
 - Jwt-decode
-- Intersection Obserber
+- Intersection Observer
 - moment.js
 
 **기능소개**

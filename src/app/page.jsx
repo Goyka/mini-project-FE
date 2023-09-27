@@ -35,7 +35,7 @@ export default function Home() {
   const [isTokenIn, setIsTokenIn] = useState(false);
   // For infinity Scroll
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(20);
+  const [postsPerPage] = useState(12);
   const [cachedData, setCachedData] = useState([]);
   const [trendingPosts, setTrendingPosts] = useState([]);
   const [isInitialLoad, setIsInitialLoad] = useState(false);

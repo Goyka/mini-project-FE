@@ -14,7 +14,7 @@ export const __getPost = createAsyncThunk(
   async (payload, thunkAPI) => {
     const pageNum = payload.page ? payload.page : 1;
     try {
-      const res = await axios.get(`/api/posts?page=${pageNum}&size=20`);
+      const res = await axios.get(`/api/posts?page=${pageNum}&size=12`);
 
       return res.data.data.content;
     } catch (error) {
@@ -29,7 +29,7 @@ const initialState = {
   isLoading: false,
   error: null,
   currentPage: 1,
-  postsPerPage: 20,
+  postsPerPage: 12,
 };
 
 const postSlice = createSlice({

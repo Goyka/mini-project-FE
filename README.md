@@ -12,7 +12,7 @@
 <br/>
 
 **URL**<br/>
-https://mini-project-b8xs3zwbg-goyka.vercel.app/
+https://mini-project-l76lk5tvn-goyka.vercel.app/
 <br/>
 <br/>
 

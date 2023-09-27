@@ -29,6 +29,8 @@ https://mini-project-b8xs3zwbg-goyka.vercel.app/
 - moment.js
 
 **기능소개**
+![system](https://github.com/Goyka/mini-project-SHADE-FE-/assets/112574979/d5d3c6a4-a26c-4107-97a3-7461cb41893a)
+
 - 로그인 / 로그인 유지 (JWT 토큰)
 - 회원가입 (이메일 인증번호 발급 방식)
 - UX 개선을 염두한 Modal 위주의 UI
